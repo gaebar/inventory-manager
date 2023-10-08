@@ -4,7 +4,7 @@
 > "We’ve got too much inventory in the back rooms and our processes are not where we want them to be and that’s causing some undue shrinkage and some out-of-stocks," Foran said.  
 
 The company has already started to implement some changes to fix these issues, such as marking down foods that are nearing their expiration date to reduce the amount of food that goes to waste.  
--Wal-Mart US CEO Greg Foran
+— Walmart US CEO Greg Foran
 Source: [Business Insider](https://www.businessinsider.com/wal-marts-ceo-reveals-8-main-problems-2015-4)
 
 ## Business Case
@@ -13,12 +13,12 @@ Design an application with the following features:
 
 ### Section A:
 - Store a minimum and a maximum number of items of the product that can be displayed on the shelf.
-- As soon as the system notices that it has reached the threshold number/weight, it is going to send a notification to replenish the items and store this information in database with timestamp.
+- As soon as the system notices that it has reached the threshold number/weight, it is going to send a notification to replenish the items and store this information in a database with timestamp.
 
 #### For example:
-1. Number of fresh apples on the shelf needs to be between 10 lbs and 45 lbs.
+1. The Number of fresh apples on the shelf needs to be between 10 lbs and 45 lbs.
 2. The max number of lawn mowers of a given type that can be on display is 5 and the minimum is 2.
-3. The maximum number of baby diapers pack of a type/brand that can be on display is 15, the minimum is 5.
+3. The maximum number of baby diapers packs of a type/brand that can be on display is 15, the minimum is 5.
 
 ### Section B:
 - Store the expiry date of each product. System determines if the product has reached expiry date by comparing it with the current date and sends a notification with the number of items and store the same information in database.
@@ -43,18 +43,18 @@ actions.
 The application will have the following methods:
 
 ### createProduct: ProductID, ProductName, ExpiryDate, TimeDurationForMarkDown.
-All of the arguments are mandatory.
+All the arguments are mandatory.
 1. Creates a product and stores in database.
 2. The ProductID must be unique. If we try to create with a non-unique ProductID, display a
 message “ProductName should have a uniqueID, the ProductName already exists with the same
 uniqueID”.
 3. If the system creates the product successfully, display, “ProductName with the ProductID
-created successfully".
+created successfully”.
 4. If the createProduct command is called without parameters, display a helpful message that
 productID and ProductName are required. And that other arguments take default values.
 5. Default values,
-- a. ExpiryDate: 3 months from the day of entry.
-- b. TimeDurationForMarkDown: 6 days before the ExpiryDate.
+   - a. ExpiryDate: 3 months from the day of entry.
+   - b. TimeDurationForMarkDown: 6 days before the ExpiryDate.
 6. Log any other exceptions and display a helpful error message.
 
 ### displayProduct: ProductName(optional), ProductID(optional).
@@ -62,7 +62,7 @@ productID and ProductName are required. And that other arguments take default va
 2. If the product is not found, display, “Productname/ProductID notfound”
 3. If the display_product command is called with no parameters, all products with product name
 and ProductID will be displayed.
-4. Log any other error/exception with a user friendly (helpful) message.
+4. Log any other error/exception with a user-friendly (helpful) message.
 
 ## Functions specific to Section A of the requirements:
 ### displayProductToRefill: none
@@ -72,9 +72,10 @@ and the quantity that needs to be replenished.
 
 ### displayProductToRefill: ProductID
 1. If the product needs to be replenished, display the number of items/weight that needs to be
-replenished. Otherwise display a relevant message.
+replenished. Otherwise, display a relevant message.
 2. Validate the ProductID and display a relevant message if the validation fails.
-displayProductCount:none
+
+### displayProductCount:none
 1. Logs/displays number/weight of all the products on the shelf.
 2. If no products on shelf display/log a relevant message.
 
@@ -124,12 +125,12 @@ Code will be executed from the fat jar. No errors/exceptions will be tolerated.
 ### createProduct: ProductID, ProductName, ExpiryDate, TimeDurationForMarkDown.
 First two arguments are mandatory.
 
-1. (I) Run the above function with all the right arguments. It should display a message “ProductName with the ProductID created successfully".
+1. (I) Run the above function with all the right arguments. It should display a message “ProductName with the ProductID created successfully”.
 2. (II) Try to create another product with a duplicate ProductID. It should fail to create a product. Display a message “ProductName should have a uniqueID, the ProductName already exists with the same uniqueID”.
 3. (III) Run the createProduct command without parameters, display a helpful message that productID and ProductName are required. And that other arguments take default values.
 4. (IV) Make sure the default values are stored,
-  - a. ExpiryDate: 3 months from the day of entry.
-  - b. TimeDurationForMarkDown: 6 days before the ExpiryDate.
+   - a. ExpiryDate: 3 months from the day of entry.
+   - b. TimeDurationForMarkDown: 6 days before the ExpiryDate.
 
 
 ### displayProduct: ProductName(optional), ProductID(optional).
@@ -138,7 +139,7 @@ other attributes.
 2. (II) If the product is not found, display, “Productname/ProductID notfound”
 3. (III) If the displayProduct command is called with no parameters, all products with product name
 and ProductID will be displayed.
-4. (IV) Log any other error/exception with a user friendly (helpful) message.
+4. (IV) Log any other error/exception with a user-friendly (helpful) message.
 
 ## Functions specific to Section A of the requirements:
 ### displayProductToRefill: none
