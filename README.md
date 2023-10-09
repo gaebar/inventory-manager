@@ -35,12 +35,12 @@ For detailed project requirements, see [Project Requirements](ProjectRequirement
 1. Clone the Repository
 
 ```bash
-git clone https://github.com/gaebar/retail-inventory-management-system.git
+git clone https://github.com/gaebar/inventory-manager.git
 ```
 
 2. Navigate into the directory:
 ```bash
-cd retail-inventory-management-system
+cd nventory-manager
 ```
 
 3. Compile the Java files:
