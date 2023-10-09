@@ -40,7 +40,7 @@ git clone https://github.com/gaebar/inventory-manager.git
 
 2. Navigate into the directory:
 ```bash
-cd nventory-manager
+cd inventory-manager
 ```
 
 3. Compile the Java files:
