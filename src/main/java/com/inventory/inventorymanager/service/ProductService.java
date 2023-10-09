@@ -1,25 +1,25 @@
 package com.inventory.inventorymanager.service;
 
 import com.inventory.inventorymanager.model.Product;
-import org.springframework.stereotype.Component;
+import com.inventory.inventorymanager.respository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
+// Contains business logic for handling products, and talks to the ProductRepository for database interactions.
 @Service
 public class ProductService {
+
+    private final ProductRepository productRepository;
+
+    @Autowired
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
     public List<Product> getProducts() {
-        return List.of(
-                new Product(
-                        "546789",
-                        "Baby wipes",
-                        LocalDate.of(2024, 12, 31),
-                        30,
-                        10,
-                        100,
-                        50
-                )
-        );
+        return productRepository.findAll();
+
     }
 }

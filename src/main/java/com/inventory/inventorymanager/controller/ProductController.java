@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+// Handles incoming HTTP requests and routes them to the appropriate service methods.
 @RestController
 @RequestMapping(path = "api/v1/product")
 public class ProductController {
