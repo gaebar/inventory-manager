@@ -14,8 +14,15 @@ jobs:
       SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
-    - name: Build and Test
-      run: ./mvnw clean install
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build and Test
+        run: ./mvnw clean install

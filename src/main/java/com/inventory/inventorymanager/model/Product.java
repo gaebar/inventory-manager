@@ -28,10 +28,10 @@ public class Product {
     private Long productID;
     private String productName;
     private LocalDate expiryDate;
-    private int timeDurationForMarkDown;
-    private int minThreshold;
-    private int maxThreshold;
-    private int currentStock;
+    private Integer timeDurationForMarkDown;
+    private Integer minThreshold;
+    private Integer maxThreshold;
+    private Integer currentStock;
 
     // I am using three constructors
     // 1. No arg constructor
