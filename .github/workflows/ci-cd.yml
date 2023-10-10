@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # Trigger this workflow on push to main branch
+      - master  # Trigger this workflow on push to main branch
 
 jobs:
   build:
