@@ -25,4 +25,5 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Build and Test
-        run: ./mvnw clean install
+        run: ./mvnw clean install -Dspring.profiles.active=github
+
