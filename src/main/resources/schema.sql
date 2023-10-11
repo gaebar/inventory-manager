@@ -1,4 +1,4 @@
-DROP TABLE products;
+DROP TABLE IF EXISTS products;
 
 CREATE TABLE products (
     product_id BIGINT PRIMARY KEY AUTO_INCREMENT,
