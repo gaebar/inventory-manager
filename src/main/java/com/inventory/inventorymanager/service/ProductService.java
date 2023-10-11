@@ -6,8 +6,11 @@ import com.inventory.inventorymanager.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import com.inventory.inventorymanager.model.Notification;
+import com.inventory.inventorymanager.repository.NotificationRepository;
 
 import java.util.List;
+import java.time.LocalDateTime;
 
 /**
  * Service class responsible for handling products.
@@ -19,9 +22,15 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
+    private NotificationService notificationService;
+
+
     /**
      * Fetches all products from the database.
-     * Requirement 1: Read a list of products from the database and return them.
      * @return List of all products.
      */
     public List<Product> getProducts() {
@@ -30,7 +39,6 @@ public class ProductService {
 
     /**
      * Finds a product by its ID.
-     * Requirement 3: Find a product by its ID.
      * @param id The ID of the product to find.
      * @return The product found.
      * @throws ProductNotFoundException if product is not found.
@@ -42,7 +50,7 @@ public class ProductService {
 
     /**
      * Creates a new product.
-     * Requirement 2: Check if a product with the same name already exists before adding a new one.
+     * Checks if a product with the same name already exists before adding a new one.
      * @param product The product to create.
      * @return The created product.
      */
@@ -55,7 +63,6 @@ public class ProductService {
 
     /**
      * Deletes a product by its ID.
-     * Requirement 4: Throw an exception if trying to delete a non-existing product.
      * @param id The ID of the product to delete.
      */
     public void deleteProduct(Long id) {
@@ -67,7 +74,6 @@ public class ProductService {
 
     /**
      * Updates a product by its ID.
-     * Requirement 5: Update a product by its ID.
      * @param id The ID of the product to update.
      * @param newProduct The new product details.
      * @return The updated product.
@@ -80,5 +86,40 @@ public class ProductService {
         }
         newProduct.setProductID(id);
         return productRepository.save(newProduct);
+    }
+
+    /**
+     * Checks if the inventory for a product has reached its defined thresholds.
+     * If so, sends a notification and saves it in the database.
+     * @param product The product to check.
+     */
+    public void checkAndUpdateInventory(Product product) {
+        int currentStock = product.getCurrentStock();
+        int minThreshold = product.getMinThreshold();
+        int maxThreshold = product.getMaxThreshold();
+
+        String message = null;
+
+        if (currentStock <= minThreshold) {
+            message = "Inventory low: Replenish product " + product.getProductName();
+        } else if (currentStock >= maxThreshold) {
+            message = "Inventory high: No replenishment needed for " + product.getProductName();
+        }
+
+        if (message != null) {
+            notificationService.sendInventoryNotification(product, message);
+        }
+    }
+
+
+    /**
+     * Checks the inventory status of all products in the database.
+     * Loops through each product and calls checkAndUpdateInventory method.
+     */
+    public void checkAllProductsInventory() {
+        List<Product> products = getProducts();
+        for(Product product : products) {
+            checkAndUpdateInventory(product);
+        }
     }
 }
