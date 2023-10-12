@@ -6,28 +6,14 @@ import com.inventory.inventorymanager.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
-import com.inventory.inventorymanager.model.Notification;
-import com.inventory.inventorymanager.repository.NotificationRepository;
 
 import java.util.List;
-import java.time.LocalDateTime;
 
-/**
- * Service class responsible for handling products.
- * This class talks to the ProductRepository for database interactions.
- */
 @Service
 public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
-    private NotificationRepository notificationRepository;
-
-    @Autowired
-    private NotificationService notificationService;
-
 
     /**
      * Fetches all products from the database.
@@ -86,40 +72,5 @@ public class ProductService {
         }
         newProduct.setProductID(id);
         return productRepository.save(newProduct);
-    }
-
-    /**
-     * Checks if the inventory for a product has reached its defined thresholds.
-     * If so, sends a notification and saves it in the database.
-     * @param product The product to check.
-     */
-    public void checkAndUpdateInventory(Product product) {
-        int currentStock = product.getCurrentStock();
-        int minThreshold = product.getMinThreshold();
-        int maxThreshold = product.getMaxThreshold();
-
-        String message = null;
-
-        if (currentStock <= minThreshold) {
-            message = "Inventory low: Replenish product " + product.getProductName();
-        } else if (currentStock >= maxThreshold) {
-            message = "Inventory high: No replenishment needed for " + product.getProductName();
-        }
-
-        if (message != null) {
-            notificationService.sendInventoryNotification(product, message);
-        }
-    }
-
-
-    /**
-     * Checks the inventory status of all products in the database.
-     * Loops through each product and calls checkAndUpdateInventory method.
-     */
-    public void checkAllProductsInventory() {
-        List<Product> products = getProducts();
-        for(Product product : products) {
-            checkAndUpdateInventory(product);
-        }
     }
 }
