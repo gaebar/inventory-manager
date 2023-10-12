@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 // Configuration settings related to products, for setting up a database or default values.
 @Configuration
-public class ProductConfig {
+class ProductConfig {
 
     @Bean
     CommandLineRunner commandLineRunner(ProductRepository repository){

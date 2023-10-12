@@ -1,5 +1,6 @@
 package com.inventory.inventorymanager.service;
 
+import com.inventory.inventorymanager.exceptions.ProductAlreadyExistsException;
 import com.inventory.inventorymanager.exceptions.ProductNotFoundException;
 import com.inventory.inventorymanager.model.Product;
 import com.inventory.inventorymanager.repository.ProductRepository;
@@ -42,7 +43,7 @@ public class ProductService {
      */
     public Product createProduct(Product product) {
         if(productRepository.existsByProductName(product.getProductName())) {
-            throw new IllegalArgumentException("Product with the same name already exists");
+            throw new ProductAlreadyExistsException("Product with the name " + product.getProductName() + " already exists");
         }
         return productRepository.save(product);
     }
