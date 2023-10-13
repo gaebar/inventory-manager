@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -16,43 +17,33 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    /**
-     * Fetches all products from the database.
-     * @return List of all products.
-     */
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
-    /**
-     * Finds a product by its ID.
-     * @param id The ID of the product to find.
-     * @return The product found.
-     * @throws ProductNotFoundException if product is not found.
-     */
     public Product getProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product with ID " + id + " not found."));
     }
 
-    /**
-     * Creates a new product.
-     * Checks if a product with the same name already exists before adding a new one.
-     * @param product The product to create.
-     * @return The created product.
-     */
     @Transactional
     public Product createProduct(Product product) {
-        if(productRepository.existsByProductName(product.getProductName())) {
-            throw new ProductAlreadyExistsException("Product with the name " + product.getProductName() + " already exists");
+        if (productRepository.existsByProductId(product.getProductID())) {
+            throw new ProductAlreadyExistsException("Product with the ID " + product.getProductID() + " already exists");
         }
+
+        if(product.getExpiryDate() == null) {
+            product.setExpiryDate(LocalDate.now().plusMonths(3));
+        }
+
+        if(product.getTimeDurationForMarkDown() == null) {
+            long daysToMarkDown = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), product.getExpiryDate());
+            product.setTimeDurationForMarkDown((int)daysToMarkDown - 6);
+        }
+
         return productRepository.save(product);
     }
 
-    /**
-     * Deletes a product by its ID.
-     * @param id The ID of the product to delete.
-     */
     @Transactional
     public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
@@ -61,13 +52,6 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    /**
-     * Updates a product by its ID.
-     * @param id The ID of the product to update.
-     * @param newProduct The new product details.
-     * @return The updated product.
-     * @throws ProductNotFoundException if product is not found.
-     */
     @Transactional
     public Product updateProduct(Long id, Product newProduct) {
         if (!productRepository.existsById(id)) {

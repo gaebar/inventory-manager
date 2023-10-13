@@ -6,36 +6,35 @@ import com.inventory.inventorymanager.model.Notification;
 import com.inventory.inventorymanager.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 
-
+/**
+ * Service layer for handling product notifications.
+ */
 @Service
 public class NotificationService {
 
-    private final NotificationRepository notificationRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     /**
-     * Constructor for NotificationService. Initializes the repository for performing CRUD operations on Notification entities.
+     * Sends a notification related to a given product.
      *
-     * @param notificationRepository Repository responsible for CRUD operations on Notification entities.
+     * @param product The related product.
+     * @param message The message to include in the notification.
+     * @throws ProductNotFoundException if the product is null.
      */
-    @Autowired
-    public NotificationService(NotificationRepository notificationRepository) {
-        this.notificationRepository = notificationRepository;
-    }
-
     public void sendInventoryNotification(Product product, String message) throws ProductNotFoundException {
         if (product == null) {
             throw new ProductNotFoundException("Product not found for notification");
         }
+
         Notification notification = new Notification();
         notification.setProduct(product);
         notification.setMessage(message);
         notification.setTimestamp(LocalDateTime.now());
 
-        // Save the notification to the database
         notificationRepository.save(notification);
-
-        // TODO: Add method to send the notification to necessary parties (e.g., email, SMS).
     }
 }
