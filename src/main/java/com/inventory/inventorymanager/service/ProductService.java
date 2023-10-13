@@ -41,6 +41,7 @@ public class ProductService {
      * @param product The product to create.
      * @return The created product.
      */
+    @Transactional
     public Product createProduct(Product product) {
         if(productRepository.existsByProductName(product.getProductName())) {
             throw new ProductAlreadyExistsException("Product with the name " + product.getProductName() + " already exists");
@@ -52,6 +53,7 @@ public class ProductService {
      * Deletes a product by its ID.
      * @param id The ID of the product to delete.
      */
+    @Transactional
     public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
             throw new ProductNotFoundException("Product with ID " + id + " not found.");

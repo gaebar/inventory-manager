@@ -1,5 +1,6 @@
 package com.inventory.inventorymanager.service;
 
+import com.inventory.inventorymanager.exceptions.ProductNotFoundException;
 import com.inventory.inventorymanager.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,12 @@ public class InventoryService {
         this.notificationService = notificationService;
     }
 
-    public void checkAndUpdateInventory(Product product) {
-        int currentStock = product.getCurrentStock();
+    public void checkAndUpdateInventory(Product product) throws ProductNotFoundException {
+        if (product == null) {
+            throw new ProductNotFoundException("Product not found");
+        }
 
+        int currentStock = product.getCurrentStock();
         String message = null;
         if (currentStock <= product.getMinThreshold()) {
             message = String.format(LOW_INVENTORY_MESSAGE, product.getProductName());
@@ -38,8 +42,15 @@ public class InventoryService {
 
     public void checkAllProductsInventory() {
         List<Product> products = productService.getProducts();
+        if (products.isEmpty()) {
+            // Handle this scenario as you see fit; you could log it, throw an exception, etc.
+        }
         for (Product product : products) {
-            checkAndUpdateInventory(product);
+            try {
+                checkAndUpdateInventory(product);
+            } catch (ProductNotFoundException e) {
+                // Log the exception or handle it as appropriate.
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.inventory.inventorymanager.service;
 
+import com.inventory.inventorymanager.exceptions.ProductNotFoundException;
 import com.inventory.inventorymanager.model.Product;
 import com.inventory.inventorymanager.model.Notification;
 import com.inventory.inventorymanager.repository.NotificationRepository;
@@ -11,28 +12,30 @@ import java.time.LocalDateTime;
 @Service
 public class NotificationService {
 
-    @Autowired
-    private NotificationRepository notificationRepository;
+    private final NotificationRepository notificationRepository;
 
     /**
-     * Sends a notification with the given message and product.
-     * The implementation details of how the notification is sent can be defined here.
-     * This method also saves the notification to the database.
+     * Constructor for NotificationService. Initializes the repository for performing CRUD operations on Notification entities.
      *
-     * @param product The related product.
-     * @param message The notification message.
+     * @param notificationRepository Repository responsible for CRUD operations on Notification entities.
      */
-    public void sendInventoryNotification(Product product, String message) {
+    @Autowired
+    public NotificationService(NotificationRepository notificationRepository) {
+        this.notificationRepository = notificationRepository;
+    }
+
+    public void sendInventoryNotification(Product product, String message) throws ProductNotFoundException {
+        if (product == null) {
+            throw new ProductNotFoundException("Product not found for notification");
+        }
         Notification notification = new Notification();
         notification.setProduct(product);
         notification.setMessage(message);
         notification.setTimestamp(LocalDateTime.now());
 
-        // TODO (maybe): method to send the notification to the necessary parties (e.g., email, SMS).
-        // sendNotificationToRecipient(notification);
-
         // Save the notification to the database
         notificationRepository.save(notification);
-    }
 
+        // TODO: Add method to send the notification to necessary parties (e.g., email, SMS).
+    }
 }
