@@ -12,13 +12,13 @@ VALUES  (3, 'Baby Diapers Infant Comfort Plus', '2027-12-09', 5, 5, 15, 8);
 
 -- Dummy notifications for testing
 -- Low stock alert for Fresh Apples
-INSERT INTO notifications (product_id, message, timestamp)
+INSERT INTO inventory_manager.notifications (product_id, message, timestamp)
 VALUES (1, 'Low stock alert for Fresh Apples', NOW());
 
 -- Replenish Lawn Mower Model 5000
-INSERT INTO notifications (product_id, message, timestamp)
+INSERT INTO inventory_manager.notifications (product_id, message, timestamp)
 VALUES (2, 'Replenish Lawn Mower Model 5000', NOW());
 
 -- Replenish Baby Diapers Infant Comfort Plus
-INSERT INTO notifications (product_id, message, timestamp)
+INSERT INTO inventory_manager.notifications (product_id, message, timestamp)
 VALUES (3, 'Replenish Baby Diapers Infant Comfort Plus', NOW());

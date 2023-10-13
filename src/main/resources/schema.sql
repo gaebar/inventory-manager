@@ -1,11 +1,9 @@
 -- Drop tables if they exist
-DROP TABLE IF EXISTS products;
-DROP TABLE IF EXISTS notifications;
-DROP TABLE IF EXISTS inventory;
-
+DROP TABLE IF EXISTS inventory_manager.products;
+DROP TABLE IF EXISTS inventory_manager.notifications;
 
 -- Create products table
-CREATE TABLE products (
+CREATE TABLE inventory_manager.products (
     product_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     product_name VARCHAR(100),
     expiry_date DATE NOT NULL,
@@ -16,10 +14,10 @@ CREATE TABLE products (
 );
 
 -- Create notifications table
-CREATE TABLE notifications (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    product_id BIGINT,
-    message TEXT,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
+CREATE TABLE inventory_manager.notifications (
+     id BIGINT PRIMARY KEY AUTO_INCREMENT,
+     product_id BIGINT,
+     message TEXT,
+     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+     FOREIGN KEY (product_id) REFERENCES inventory_manager.products(product_id)
 );
