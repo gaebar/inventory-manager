@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 // Entity annotation specifies that the class is an entity and is mapped to a database table
 @Entity
 // Table annotation provides the table details
-@Table
+@Table(name = "notifications")
 public class Notification {
 
     // ID annotation specifies the primary key of the entity
@@ -23,9 +23,11 @@ public class Notification {
     private Product product;
 
     // Field to store the message of the notification
+    @Column(name = "message")
     private String message;
 
     // Field to store the timestamp when the notification was created
+    @Column(name = "timestamp", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime timestamp;
 
     // Default constructor required by JPA

@@ -1,6 +1,8 @@
 -- Drop tables if they exist
 DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS notifications;
+DROP TABLE IF EXISTS inventory;
+
 
 -- Create products table
 CREATE TABLE products (

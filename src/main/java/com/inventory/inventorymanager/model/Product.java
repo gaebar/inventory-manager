@@ -1,7 +1,7 @@
 package com.inventory.inventorymanager.model;
 
 import jakarta.persistence.*;
-
+import jakarta.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
 /**
@@ -12,7 +12,7 @@ import java.time.LocalDate;
  * @version 1.0
  */
 @Entity
-@Table
+@Table(name = "products")
 public class Product {
 
     /**
@@ -20,38 +20,45 @@ public class Product {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private Long productID;
 
     /**
      * The name of the product.
      * This field is unique and cannot be null.
      */
-    @Column(nullable = false, unique = true)
+    @NotEmpty(message = "Product name should not be empty")
+    @Column(name = "product_name", nullable = false, unique = true)
     private String productName;
 
     /**
      * The expiry date of the product.
      */
+    @Column(name = "expiry_date", nullable = false)
     private LocalDate expiryDate;
 
     /**
      * The time duration within which the product should be marked down.
      */
+    @Column(name = "time_duration_for_markdown", nullable = false)
     private Integer timeDurationForMarkDown;
 
     /**
      * Minimum threshold for alerts when stock goes below this level.
      */
+    @Column(name = "min_threshold", nullable = false)
     private Integer minThreshold;
 
     /**
      * Maximum threshold for maintaining stock.
      */
+    @Column(name = "max_threshold", nullable = false)
     private Integer maxThreshold;
 
     /**
      * The current stock level of the product.
      */
+    @Column(name = "current_stock", nullable = false)
     private Integer currentStock;
 
     /**
