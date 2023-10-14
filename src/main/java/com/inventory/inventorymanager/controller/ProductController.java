@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping(path = "api/v1/products")
@@ -55,4 +56,33 @@ public class ProductController {
         Product updatedProduct = productService.updateProduct(id, product);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
+
+    @GetMapping("/expiring")
+    public ResponseEntity<List<Product>> getProductsExpiringBefore(@RequestParam LocalDate date) {
+        logger.info("Fetching products expiring before: {}", date);
+        List<Product> products = productService.getProductsExpiringBefore(date);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+    @GetMapping("/refill")
+    public ResponseEntity<List<Product>> getProductsToRefill(@RequestParam Integer threshold) {
+        logger.info("Fetching products with stock less than: {}", threshold);
+        List<Product> products = productService.getProductsToRefill(threshold);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/markdown")
+    public ResponseEntity<List<Product>> getProductsInMarkDown(@RequestParam LocalDate today) {
+        logger.info("Fetching products in markdown for date: {}", today);
+        List<Product> products = productService.getProductsInMarkDown(today);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/for-markdown")
+    public ResponseEntity<List<Product>> getProductsForMarkDown(@RequestParam LocalDate today, @RequestParam LocalDate oneWeekFromNow) {
+        logger.info("Fetching products for markdown between {} and {}", today, oneWeekFromNow);
+        List<Product> products = productService.getProductsForMarkDown(today, oneWeekFromNow);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+
 }
