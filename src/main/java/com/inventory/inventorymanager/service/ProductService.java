@@ -5,6 +5,7 @@ import com.inventory.inventorymanager.exceptions.ProductNotFoundException;
 import com.inventory.inventorymanager.model.Product;
 import com.inventory.inventorymanager.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
@@ -74,16 +75,14 @@ public class ProductService {
     /**
      * Creates a product and stores it in the database.
      * Sets default values for ExpiryDate and TimeDurationForMarkDown if not provided.
-     * Validates uniqueness of ProductID.
      *
      * @param product The product entity to be created.
      * @return The created product.
-     * @throws ProductAlreadyExistsException if a product with the given ProductID already exists.
+     * @throws DataIntegrityViolationException if a product with the given ProductID already exists.
      */
     @Transactional
     public Product createProduct(Product product) {
-        validateProduct(product);  // Validation logic moved to a separate method
-
+        // Removed validateProduct() call, relying on JPA for uniqueness checks
         if (product.getExpiryDate() == null) {
             product.setExpiryDate(LocalDate.now().plusMonths(defaultExpiryDuration));
         }
@@ -93,9 +92,15 @@ public class ProductService {
             product.setTimeDurationForMarkDown((int) daysToMarkDown - defaultMarkdownDuration);
         }
 
-        Product savedProduct = productRepository.save(product);
+        Product savedProduct = null;
+        try {
+            savedProduct = productRepository.save(product);
+            LOGGER.info("ProductName with the ProductID {} created successfully.", savedProduct.getProductID());
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.error("Product with same ID already exists", e);
+            throw new ProductAlreadyExistsException("ProductName should have a uniqueID, the ProductName already exists with the same uniqueID: " + product.getProductID());
+        }
 
-        LOGGER.info("ProductName with the ProductID {} created successfully.", savedProduct.getProductID());
         return savedProduct;
     }
 
