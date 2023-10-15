@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,7 +23,14 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Value("${default.expiry.duration}")
+    private int defaultExpiryDuration;
+
+    @Value("${default.markdown.duration}")
+    private int defaultMarkdownDuration;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
+
 
     /**
      * Fetches all products from the database.
@@ -45,6 +53,24 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException("Product with ID " + id + " not found."));
     }
 
+
+    /**
+     * Validates the product entity before attempting to save it.
+     * This internal method is invoked by the createProduct() method.
+     *
+     * @param product The product entity to validate.
+     */
+    private void validateProduct(Product product) {
+        if (product.getProductID() == null || product.getProductName() == null || product.getProductName().isEmpty()) {
+            LOGGER.error("Missing required fields");
+            throw new IllegalArgumentException("productID and ProductName are required. Other arguments take default values.");
+        }
+        if (productRepository.existsByProductID(product.getProductID())) {
+            LOGGER.error("Product with same ID already exists");
+            throw new ProductAlreadyExistsException("ProductName should have a uniqueID, the ProductName already exists with the same uniqueID: " + product.getProductID());
+        }
+    }
+
     /**
      * Creates a product and stores it in the database.
      * Sets default values for ExpiryDate and TimeDurationForMarkDown if not provided.
@@ -56,30 +82,21 @@ public class ProductService {
      */
     @Transactional
     public Product createProduct(Product product) {
-        if (product.getProductID() == null || product.getProductName() == null || product.getProductName().isEmpty()) {
-            throw new IllegalArgumentException("productID and ProductName are required. Other arguments take default values.");
-        }
-
-        if (productRepository.existsByProductID(product.getProductID())) {
-            throw new ProductAlreadyExistsException("ProductName should have a uniqueID, the ProductName already exists with the same uniqueID: " + product.getProductID());
-        }
-
-        // Check if product with same name already exists
-        if (productRepository.existsByProductName(product.getProductName())) {
-            throw new ProductAlreadyExistsException("A product with the name '" + product.getProductName() + "' already exists.");
-        }
+        validateProduct(product);  // Validation logic moved to a separate method
 
         if (product.getExpiryDate() == null) {
-            product.setExpiryDate(LocalDate.now().plusMonths(3));
+            product.setExpiryDate(LocalDate.now().plusMonths(defaultExpiryDuration));
         }
 
         if (product.getTimeDurationForMarkDown() == null) {
             long daysToMarkDown = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), product.getExpiryDate());
-            product.setTimeDurationForMarkDown((int) daysToMarkDown - 6);
+            product.setTimeDurationForMarkDown((int) daysToMarkDown - defaultMarkdownDuration);
         }
 
-        LOGGER.info("Product with ID {} created successfully.", product.getProductID());
-        return productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+
+        LOGGER.info("ProductName with the ProductID {} created successfully.", savedProduct.getProductID());
+        return savedProduct;
     }
 
     /**
