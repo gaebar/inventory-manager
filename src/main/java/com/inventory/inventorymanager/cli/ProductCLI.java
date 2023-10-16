@@ -113,17 +113,15 @@ public class ProductCLI {
             System.out.println("An error occurred: " + e.getMessage());
         }
 
-        System.out.println("Do you want to try again? (y/n): ");
-        String choice = scanner.nextLine().trim().toLowerCase();
-
-        if ("n".equals(choice)) {
-            return; // The return statement in this context is valid and necessary to exit the method prematurely based on the user's choice.
+        if (retryPrompt()) {
+            return; // This return is not redundant since it serves to exit the method prematurely based on a condition
         }
     }
 
 
     public void displayProduct() {
-        while (true) {
+        // This return is not redundant since it serves to exit the method prematurely based on a condition
+        do {
             try {
                 System.out.println("Enter ProductName (optional): ");
                 String productName = scanner.nextLine();
@@ -180,12 +178,7 @@ public class ProductCLI {
                 System.out.println("An error occurred: " + e.getMessage());
             }
 
-            System.out.println("Do you want to try again? (y/n): ");
-            String choice = scanner.nextLine().trim().toLowerCase();
-            if ("n".equals(choice)) {
-                return; // This return is not redundant since it serves to exit the method prematurely based on a condition
-            }
-        }
+        } while (!retryPrompt());
     }
 
 
@@ -194,5 +187,19 @@ public class ProductCLI {
         LOGGER.info("Exiting application");
         scanner.close();
         System.exit(0);
+    }
+
+    private boolean retryPrompt() {
+        while (true) {
+            System.out.println("Do you want to try again? (y/n): ");
+            String choice = scanner.nextLine().trim().toLowerCase();
+            if ("y".equals(choice)) {
+                return false;  // Indicate that the user wants to retry
+            } else if ("n".equals(choice)) {
+                return true;  // Indicate that the user doesn't want to retry
+            } else {
+                System.out.println("Invalid choice. Please enter 'y' or 'n'.");
+            }
+        }
     }
 }
