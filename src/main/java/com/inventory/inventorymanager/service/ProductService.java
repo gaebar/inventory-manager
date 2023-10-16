@@ -87,7 +87,8 @@ public class ProductService {
      */
     @Transactional
     public Product createProduct(Product product) {
-        // Removed validateProduct() call, relying on JPA for uniqueness checks
+        validateProduct(product);
+
         if (product.getExpiryDate() == null) {
             product.setExpiryDate(LocalDate.now().plusMonths(defaultExpiryDuration));
         }
