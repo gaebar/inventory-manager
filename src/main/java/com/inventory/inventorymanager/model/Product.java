@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  */
 @Entity
-@Table(name = "products")
+@Table(name = "products", schema = "inventory_manager")
 public class Product {
 
     private static final Logger logger = LoggerFactory.getLogger(Product.class);

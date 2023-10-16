@@ -154,7 +154,6 @@ public class ProductService {
     /**
      * Retrieves a list of products expiring before a specified date.
      *
-     * @param expiryDate The date to check against.
      * @return List of products expiring before the specified date.
      */
     public List<Product> getExpiringProducts(LocalDate expiryDate) {
