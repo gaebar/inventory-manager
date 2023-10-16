@@ -21,8 +21,12 @@ import java.util.List;
 @Service
 public class ProductService {
 
+    private final ProductRepository productRepository;
+
     @Autowired
-    private ProductRepository productRepository;
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @Value("${default.expiry.duration}")
     private int defaultExpiryDuration;
@@ -31,6 +35,7 @@ public class ProductService {
     private int defaultMarkdownDuration;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
+
 
 
     /**

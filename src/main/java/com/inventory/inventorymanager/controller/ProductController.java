@@ -58,11 +58,12 @@
 //    }
 //
 //    @GetMapping("/expiring")
-//    public ResponseEntity<List<Product>> getProductsExpiringBefore(@RequestParam LocalDate date) {
-//        logger.info("Fetching products expiring before: {}", date);
-//        List<Product> products = productService.getProductsExpiringBefore(date);
+//    public ResponseEntity<List<Product>> getExpiringProducts() {
+//        logger.info("Fetching expiring products");
+//        List<Product> products = productService.getExpiringProducts();
 //        return new ResponseEntity<>(products, HttpStatus.OK);
 //    }
+
 //    @GetMapping("/refill")
 //    public ResponseEntity<List<Product>> getProductsToRefill(@RequestParam Integer threshold) {
 //        logger.info("Fetching products with stock less than: {}", threshold);
@@ -72,21 +73,27 @@
 //
 //    @GetMapping("/markdown")
 //    public ResponseEntity<List<Product>> getProductsOnMarkDown(
-//            @RequestParam(required = false) LocalDate startDate,
-//            @RequestParam(required = false) LocalDate endDate) {
+//    @RequestParam(required = false) LocalDate startDate,
+//    @RequestParam(required = false) LocalDate endDate) {
 //
-//        if(startDate == null) {
+//            if(startDate == null) {
 //            startDate = LocalDate.now();
-//        }
-//
-//        if(endDate == null) {
+//            }
+//            if(endDate == null) {
 //            endDate = startDate.plusWeeks(1);
-//        }
-//
-//        logger.info("Fetching products for markdown between {} and {}", startDate, endDate);
-//        List<Product> products = productService.getProductsOnMarkDownInRange(startDate, endDate);
-//        return new ResponseEntity<>(products, HttpStatus.OK);
-//    }
+//            }
+//            logger.info("Fetching products for markdown between {} and {}", startDate, endDate);
+//            List<Product> products = productService.getProductsOnMarkDownInRange(startDate, endDate);
+//            return new ResponseEntity<>(products, HttpStatus.OK);
+//            }
+
+//    @GetMapping("/threshold")
+//    public ResponseEntity<List<Product>> checkThresholds() {
+//            logger.info("Checking products for stock thresholds");
+//            List<Product> products = productService.checkThresholds();
+//            return new ResponseEntity<>(products, HttpStatus.OK);
+//            }
+
 //
 //
 //
