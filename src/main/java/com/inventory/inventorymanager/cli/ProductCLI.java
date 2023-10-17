@@ -33,18 +33,36 @@ public class ProductCLI {
         int maxThreshold;
         int currentStock;
 
+
+        while (true) {
+            try {
+                System.out.println("Enter ProductName: ");
+                productName = scanner.nextLine();
+                if (productName == null || productName.trim().isEmpty()) {
+                    System.out.println("ProductName and ProductID are required.");
+                    System.out.println("Other arguments take default values.");
+                    continue;
+                }
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid ProductName format. Please enter a valid character.");
+            }
+        }
+
         while (true) {
             try {
                 System.out.println("Enter ProductID: ");
                 productID = Long.parseLong(scanner.nextLine());
-                break;
+
+                if(productService.existProductID(productID)){
+                    System.out.println("ProductName should have a uniqueID, the ProductName already exists with the same uniqueID");
+                } else {
+                    break;
+                }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid ProductID format. Please enter a valid number.");
             }
         }
-
-        System.out.println("Enter ProductName: ");
-        productName = scanner.nextLine();
 
         while (true) {
             try {
@@ -67,6 +85,7 @@ public class ProductCLI {
                 System.out.println("Invalid number format. Please enter a valid number.");
             }
         }
+
         while (true) {
             try {
                 System.out.println("Enter MinThreshold: ");
@@ -98,11 +117,7 @@ public class ProductCLI {
         }
 
         try {
-            Product newProduct = new Product(productID, productName, expiryDate, timeDurationForMarkDown, minThreshold, maxThreshold, currentStock);
-            Product createdProduct = productService.createProduct(newProduct);
-
-            System.out.println("ProductName with the ProductID " + createdProduct.getProductID() + " created successfully.");
-            LOGGER.info("Product created successfully with ID: " + createdProduct.getProductID());
+            this.createProduct(productID, productName, expiryDate, timeDurationForMarkDown, minThreshold, maxThreshold, currentStock);
 
         } catch (ProductAlreadyExistsException e) {
             LOGGER.warning("Product already exists: " + e.getMessage());
@@ -118,9 +133,14 @@ public class ProductCLI {
         }
     }
 
+    public void createProduct(long productID, String productName, LocalDate expiryDate, Integer timeDurationForMarkDown,  Integer minThreshold, Integer maxThreshold, Integer currentStock){
+        Product createdProduct = productService.createProduct(productID, productName, expiryDate, timeDurationForMarkDown, minThreshold, maxThreshold, currentStock);
+        System.out.println("ProductName with the ProductID " + createdProduct.getProductID() + " created successfully.");
+        LOGGER.info("Product created successfully with ID: " + createdProduct.getProductID());
+    }
+
 
     public void displayProduct() {
-        // This return is not redundant since it serves to exit the method prematurely based on a condition
         do {
             try {
                 System.out.println("Enter ProductName (optional): ");

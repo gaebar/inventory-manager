@@ -81,33 +81,42 @@ public class ProductService {
      * Creates a product and stores it in the database.
      * Sets default values for ExpiryDate and TimeDurationForMarkDown if not provided.
      *
-     * @param product The product entity to be created.
+     * @param newProduct The product entity to be created.
      * @return The created product.
      * @throws DataIntegrityViolationException if a product with the given ProductID already exists.
      */
-    @Transactional
-    public Product createProduct(Product product) {
-        validateProduct(product);
 
-        if (product.getExpiryDate() == null) {
-            product.setExpiryDate(LocalDate.now().plusMonths(defaultExpiryDuration));
+    // TODO: change the API according to the requirements, it should take 4 mandatory arguments
+    @Transactional
+    public Product createProduct(long productID, String productName, LocalDate expiryDate, Integer timeDurationForMarkDown,  Integer minThreshold, Integer maxThreshold, Integer currentStock) {
+        //validateProduct(product);
+
+        Product newProduct = new Product(productID, productName, expiryDate, timeDurationForMarkDown, minThreshold, maxThreshold, currentStock);
+
+        if (expiryDate == null) {
+            newProduct.setExpiryDate(LocalDate.now().plusMonths(defaultExpiryDuration));
         }
 
-        if (product.getTimeDurationForMarkDown() == null) {
-            long daysToMarkDown = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), product.getExpiryDate());
-            product.setTimeDurationForMarkDown((int) daysToMarkDown - defaultMarkdownDuration);
+        if (newProduct.getTimeDurationForMarkDown() == null) {
+            long daysToMarkDown = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), newProduct.getExpiryDate());
+            newProduct.setTimeDurationForMarkDown((int) daysToMarkDown - defaultMarkdownDuration);
         }
 
         Product savedProduct = null;
         try {
-            savedProduct = productRepository.save(product);
+            savedProduct = productRepository.save(newProduct);
             LOGGER.info("ProductName with the ProductID {} created successfully.", savedProduct.getProductID());
         } catch (DataIntegrityViolationException e) {
             LOGGER.error("Product with same ID already exists", e);
-            throw new ProductAlreadyExistsException("ProductName should have a uniqueID, the ProductName already exists with the same uniqueID: " + product.getProductID());
+            throw new ProductAlreadyExistsException("ProductName should have a uniqueID, the ProductName already exists with the same uniqueID: " + newProduct.getProductID());
         }
 
         return savedProduct;
+    }
+
+    @Transactional
+    public boolean existProductID(Long id) {
+        return productRepository.existsById(id);
     }
 
     /**
@@ -152,49 +161,67 @@ public class ProductService {
     }
 
     /**
-     * Retrieves a list of products expiring before a specified date.
+     * Checks the stock thresholds of a given product and logs appropriate notifications.
      *
-     * @return List of products expiring before the specified date.
+     * @param productId The ID of the product to check.
      */
-    public List<Product> getExpiringProducts(LocalDate expiryDate) {
-        return productRepository.findByExpiryDateBefore(expiryDate);
-    }
+    public void checkStockThresholds(Long productId) {
+        Product product = getProductById(productId);
+        int currentStock = product.getCurrentStock();
+        int minThreshold = product.getMinThreshold();
+        int maxThreshold = product.getMaxThreshold();
 
-    public Product displayProduct(String productName, Long productId) {
-        if (productName != null) {
-            return productRepository.findByProductName(productName)
-                    .orElseThrow(() -> new ProductNotFoundException("Product with name " + productName + " not found."));
-        } else if (productId != null) {
-            return getProductById(productId); // Reuse the existing method.
-        } else {
-            // Display all products
-            List<Product> products = getProducts(); // Reuse the existing method.
-            // Logic to display these products in the console/GUI goes here.
-            return null; // Adjust return type based on your requirements.
+        if (currentStock < minThreshold) {
+            System.out.println("Notification: Stock for product " + product.getProductName() + " is below the minimum threshold. Please replenish.");
+        } else if (currentStock > maxThreshold) {
+            System.out.println("Notification: Stock for product " + product.getProductName() + " has exceeded the maximum threshold. Please adjust.");
         }
     }
 
-    /**
-     * Retrieves a list of products that need refilling.
-     *
-     * @param productId The ID of the product.
-     * @return List of products that need refilling.
-     */
-    public List<Product> displayProductToRefill(Long productId) {
-        return productRepository.findByCurrentStockLessThanAndProductID(10, productId);
-    }
 
-    /**
-     * Retrieves the current stock of a product.
-     *
-     * @param productId The ID of the product.
-     * @return Current stock of the product.
-     */
-    public int displayProductCount(Long productId) {
-        Product product = getProductById(productId);
-        return product.getCurrentStock();
-    }
+        /**
+         * Retrieves a list of products expiring before a specified date.
+         *
+         * @return List of products expiring before the specified date.
+         */
+        public List<Product> getExpiringProducts (LocalDate expiryDate){
+            return productRepository.findByExpiryDateBefore(expiryDate);
+        }
 
+        public Product displayProduct (String productName, Long productId){
+            if (productName != null) {
+                return productRepository.findByProductName(productName)
+                        .orElseThrow(() -> new ProductNotFoundException("Product with name " + productName + " not found."));
+            } else if (productId != null) {
+                return getProductById(productId); // Reuse the existing method.
+            } else {
+                // Display all products
+                List<Product> products = getProducts(); // Reuse the existing method.
+                // Logic to display these products in the console/GUI goes here.
+                return null; // Adjust return type based on your requirements.
+            }
+        }
+
+        /**
+         * Retrieves a list of products that need refilling.
+         *
+         * @param productId The ID of the product.
+         * @return List of products that need refilling.
+         */
+        public List<Product> displayProductToRefill (Long productId){
+            return productRepository.findByCurrentStockLessThanAndProductID(10, productId);
+        }
+
+        /**
+         * Retrieves the current stock of a product.
+         *
+         * @param productId The ID of the product.
+         * @return Current stock of the product.
+         */
+        public int displayProductCount (Long productId){
+            Product product = getProductById(productId);
+            return product.getCurrentStock();
+        }
 
     public LocalDate displayProductsExpiryDate(Long productId) {
         if (productId == null) {
