@@ -1,6 +1,6 @@
 package com.inventory.inventorymanager.cli;
-
 import com.inventory.inventorymanager.service.ProductService;
+
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -66,25 +66,28 @@ public class CommandRouter {
 
                 case "4":
                     System.out.println("You chose: Display Product to Refill");
-
+                    productCLI.displayProductToRefill();
                     break;
                     
 //                case "5":
 //                    System.out.println("You chose: Display All Products Count");
-//
+//                    productCLI.displayAllProductsCount();
 //                    break;
+
 //                case "6":
 //                    System.out.println("You chose: Display Product Count");
-//
+//                      productCLI.displayProductCount();
 //                    break;
+
 //                case "7":
 //                    System.out.println("You chose: Display Products by Expiry Date");
-//
+//                      productCLI.displayProductExpiryDate();
 //                    break;
 //                case "8":
 //                    System.out.println("You chose: Display All Products by Expiry Date");
-//
+//                  productCLI.displayAllProductsExpiryDate()
 //                    break;
+
 //                case "9":
 //                    System.out.println("You chose: Display Expired Products");
 //
@@ -93,6 +96,7 @@ public class CommandRouter {
 //                    System.out.println("You chose: Display Products in Markdown");
 //
 //                    break;
+
 //                case "11":
 //                    System.out.println("You chose: Display Products for Future Markdown");
 //

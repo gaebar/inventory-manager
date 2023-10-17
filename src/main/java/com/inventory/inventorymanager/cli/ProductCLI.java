@@ -234,6 +234,49 @@ public class ProductCLI {
         promptForAnotherOperationOrExit();
     }
 
+    public void displayProductToRefill() {
+        try {
+            System.out.println("Enter ProductID: ");
+            long productID = Long.parseLong(scanner.nextLine());
+
+            // Fetch the product with the given ID
+            Product product = productService.getProductById(productID);
+
+
+            if (product == null) {
+                LOGGER.warning("Product with given ProductID not found.");
+                System.out.println("Product with given ProductID not found.");
+                return;
+            }
+
+            // Check if current stock is less than or equal to the minThreshold
+            if (product.getCurrentStock() <= product.getMinThreshold()) {
+                // Calculate the quantity to be replenished
+                int quantityToReplenish = product.getMaxThreshold() - product.getCurrentStock();
+
+                System.out.println("-------------------------------------------------");
+                System.out.println("ProductID: " + product.getProductID());
+                System.out.println("ProductName: " + product.getProductName());
+                System.out.println("CurrentStock: " + product.getCurrentStock());
+                System.out.println("MinThreshold: " + product.getMinThreshold());
+                System.out.println("MaxThreshold: " + product.getMaxThreshold());
+                System.out.println("Quantity to Replenish: " + quantityToReplenish);
+                System.out.println("-------------------------------------------------");
+            } else {
+                LOGGER.info("Product is sufficiently stocked and does not need replenishment.");
+                System.out.println("Product is sufficiently stocked and does not need replenishment.");
+            }
+        } catch (NumberFormatException e) {
+            LOGGER.warning("Invalid ProductID format. Please enter a valid number.");
+            System.out.println("Invalid ProductID format. Please enter a valid number.");
+        } catch (Exception e) {
+            LOGGER.severe("An error occurred: " + e.getMessage());
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        promptForAnotherOperationOrExit();
+    }
+
+
     public void quitApplication() {
         System.out.println("Thank you for using the Product Management System! Have a great day!");
         LOGGER.info("Exiting application");
