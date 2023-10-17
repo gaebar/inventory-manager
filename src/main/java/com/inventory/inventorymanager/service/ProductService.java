@@ -118,22 +118,11 @@ public class ProductService {
         return productRepository.existsById(id);
     }
 
-    /**
-     * Updates a product by its ID.
-     *
-     * @param id The ID of the product to be updated.
-     * @param newProduct The new product details.
-     * @return The updated product.
-     * @throws ProductNotFoundException if the product is not found.
-     */
     @Transactional
-    public Product updateProduct(Long id, Product newProduct) {
-        if (!productRepository.existsById(id)) {
-            throw new ProductNotFoundException("Product with ID " + id + " not found.");
-        }
-        newProduct.setProductID(id);
-        return productRepository.save(newProduct);
+    public boolean existProductName(String productName) {
+        return productRepository.existsByProductName(productName);
     }
+
 
     /**
      * Retrieves a list of products with stock below a given threshold.

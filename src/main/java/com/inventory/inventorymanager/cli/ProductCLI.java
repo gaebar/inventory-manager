@@ -16,7 +16,8 @@ import java.util.logging.Logger;
 
 @Component
 public class ProductCLI {
-    private final static Logger LOGGER = Logger.getLogger(ProductCLI.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ProductCLI.class.getName());
+
     private final ProductService productService;
     private final Scanner scanner;
 
@@ -43,6 +44,10 @@ public class ProductCLI {
                     System.out.println("Other arguments take default values.");
                     continue;
                 }
+                if(productService.existProductName(productName)){
+                    System.out.println("ProductName should be unique. A product with the name '" + productName + "' already exists.");
+                    continue;
+                }
                 break;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid ProductName format. Please enter a valid character.");
@@ -55,7 +60,7 @@ public class ProductCLI {
                 productID = Long.parseLong(scanner.nextLine());
 
                 if(productService.existProductID(productID)){
-                    System.out.println("ProductName should have a uniqueID, the ProductName already exists with the same uniqueID");
+                    System.out.println("ProductName should have a uniqueID, the ProductName '" + productName + "' already exists with the same uniqueID");
                 } else {
                     break;
                 }
@@ -117,7 +122,7 @@ public class ProductCLI {
         }
 
         try {
-            this.createProduct(productID, productName, expiryDate, timeDurationForMarkDown, minThreshold, maxThreshold, currentStock);
+            createProduct(productID, productName, expiryDate, timeDurationForMarkDown, minThreshold, maxThreshold, currentStock);
 
         } catch (ProductAlreadyExistsException e) {
             LOGGER.warning("Product already exists: " + e.getMessage());
@@ -139,66 +144,95 @@ public class ProductCLI {
 
 
     public void displayProduct() {
-        do {
-            try {
-                System.out.println("Enter ProductName (optional): ");
-                String productName = scanner.nextLine();
+        System.out.println("To display all products, leave both the ProductName and ProductID fields blank.");
+        System.out.println("Enter ProductName (optional): ");
+        String productName = scanner.nextLine();
 
-                System.out.println("Enter ProductID (optional): ");
-                String productIdStr = scanner.nextLine();
-                Long productID = productIdStr.isEmpty() ? null : Long.parseLong(productIdStr);
+        System.out.println("Enter ProductID (optional): ");
+        String productIdStr = scanner.nextLine();
+        Long productID = productIdStr.isEmpty() ? null : Long.parseLong(productIdStr);
 
-                if (productName.isEmpty() && productID == null) {
-                    // Display all products
-                    System.out.println("Leave both fields blank to display all products");  // Added this line
-                    List<Product> allProducts = productService.getProducts();
-                    if (allProducts.isEmpty()) {
-                        LOGGER.warning("No products found.");
-                        System.out.println("No products found.");
-                    } else {
-                        LOGGER.info("All products displayed successfully");
-                        for (Product p : allProducts) {
-                            System.out.println("ProductID: " + p.getProductID());
-                            System.out.println("ProductName: " + p.getProductName());
-                            System.out.println("ExpiryDate: " + p.getExpiryDate());
-                            System.out.println("TimeDurationForMarkDown: " + p.getTimeDurationForMarkDown());
-                            System.out.println("MinThreshold: " + p.getMinThreshold());
-                            System.out.println("MaxThreshold: " + p.getMaxThreshold());
-                            System.out.println("CurrentStock: " + p.getCurrentStock());
-                            System.out.println("-------------------------------------------------");
-                        }
-                    }
-                } else {
-                    Product foundProduct = productService.displayProduct(productName, productID);
-                    if (foundProduct != null) {
-                        LOGGER.info("Product with ProductID: " + foundProduct.getProductID() + " displayed successfully.");
-                        System.out.println("Product Found:");
-                        System.out.println("ProductID: " + foundProduct.getProductID());
-                        System.out.println("ProductName: " + foundProduct.getProductName());
-                        System.out.println("ExpiryDate: " + foundProduct.getExpiryDate());
-                        System.out.println("TimeDurationForMarkDown: " + foundProduct.getTimeDurationForMarkDown());
-                        System.out.println("MinThreshold: " + foundProduct.getMinThreshold());
-                        System.out.println("MaxThreshold: " + foundProduct.getMaxThreshold());
-                        System.out.println("CurrentStock: " + foundProduct.getCurrentStock());
-                    } else {
-                        LOGGER.warning("Product with given ProductName/ProductID not found.");
-                        System.out.println("ProductName/ProductID not found");
-                    }
-                }
-                break;
-
-            } catch (InputMismatchException | NumberFormatException e) {
-                LOGGER.warning("Invalid input format: " + e.getMessage());
-                System.out.println("Please enter the correct format for each field.");
-
-            } catch (Exception e) {
-                LOGGER.severe("An error occurred: " + e.getMessage());
-                System.out.println("An error occurred: " + e.getMessage());
-            }
-
-        } while (!promptForAnotherOperationOrExit());
+        displayProduct(productName, productID); // Calls the overloaded method
     }
 
+    public void displayProduct(String productName, Long productID) {
+        try {
+            // If both fields are empty, display all products.
+            if ((productName == null || productName.isEmpty()) && productID == null) {
+                // Display all products
+                List<Product> allProducts = productService.getProducts();
+                if (allProducts.isEmpty()) {
+                    LOGGER.warning("No products found.");
+                    System.out.println("No products found.");
+                } else {
+                    LOGGER.info("All products displayed successfully");
+                    for (Product p : allProducts) {
+                        displayProductDetails(p);
+                    }
+                    System.out.println("All products displayed successfully");
+                }
+            } else {
+                Product foundProduct = productService.displayProduct(productName, productID);
+
+                if (foundProduct != null) {
+                    LOGGER.info("Product with ProductID: " + foundProduct.getProductID() + " displayed successfully.");
+                    System.out.println("Product Found:");
+                    displayProductDetails(foundProduct);
+                } else {
+                    LOGGER.warning("Product with given ProductName/ProductID not found.");
+                    System.out.println("ProductName/ProductID not found");
+                }
+            }
+        } catch (InputMismatchException | NumberFormatException e) {
+            LOGGER.warning("Invalid input format: " + e.getMessage());
+            System.out.println("Please enter the correct format for each field.");
+        } catch (Exception e) {
+            LOGGER.severe("An error occurred: " + e.getMessage());
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        promptForAnotherOperationOrExit();
+    }
+
+    public void displayAllProductsToRefill() {
+        try {
+            // Fetch all products from the service
+            List<Product> allProducts = productService.getProducts();
+
+            // Use a flag to check if there are any products to refill
+            boolean productsToRefillExist = false;
+
+            // Loop through each product and check if it needs to be refilled
+            for (Product p : allProducts) {
+                // Check if current stock is less than or equal to the minThreshold
+                if (p.getCurrentStock() <= p.getMinThreshold()) {
+                    productsToRefillExist = true;
+
+                    // Calculate the quantity to be replenished
+                    int quantityToReplenish = p.getMaxThreshold() - p.getCurrentStock();
+
+                    System.out.println("-------------------------------------------------");
+                    System.out.println("ProductID: " + p.getProductID());
+                    System.out.println("ProductName: " + p.getProductName());
+                    System.out.println("CurrentStock: " + p.getCurrentStock());
+                    System.out.println("MinThreshold: " + p.getMinThreshold());
+                    System.out.println("MaxThreshold: " + p.getMaxThreshold());
+                    System.out.println("Quantity to Replenish: " + quantityToReplenish);
+                    System.out.println("-------------------------------------------------");
+                }
+            }
+
+            // If no products need to be refilled, display a relevant message
+            if (!productsToRefillExist) {
+                LOGGER.info("All products are sufficiently stocked, no products need replenishment.");
+                System.out.println("All products are sufficiently stocked, no products need replenishment.");
+            }
+
+        } catch (Exception e) {
+            LOGGER.severe("An error occurred: " + e.getMessage());
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        promptForAnotherOperationOrExit();
+    }
 
     public void quitApplication() {
         System.out.println("Thank you for using the Product Management System! Have a great day!");
@@ -208,18 +242,20 @@ public class ProductCLI {
     }
 
 
-    private boolean promptForAnotherOperationOrExit() {
-        while (true) {
-            System.out.println("Do you want to perform another operation? (y/n): ");
-            String choice = scanner.nextLine().trim().toLowerCase();
-            if ("y".equals(choice)) {
-                return true;  // Continue with another operation
-            } else if ("n".equals(choice)) {
-                quitApplication();  // If user chooses not to perform another operation, exit the program
-                return false;  // This line won't be reached, but it's good to have a definitive return value
-            } else {
-                System.out.println("Invalid choice. Please enter 'y' or 'n'.");
-            }
-        }
+    private void promptForAnotherOperationOrExit() {
+        System.out.println("\nPress Enter to return to the main menu...");
+        scanner.nextLine();
+    }
+
+    private void displayProductDetails(Product p) {
+        System.out.println("-------------------------------------------------");
+        System.out.println("ProductID: " + p.getProductID());
+        System.out.println("ProductName: " + p.getProductName());
+        System.out.println("ExpiryDate: " + p.getExpiryDate());
+        System.out.println("TimeDurationForMarkDown: " + p.getTimeDurationForMarkDown());
+        System.out.println("MinThreshold: " + p.getMinThreshold());
+        System.out.println("MaxThreshold: " + p.getMaxThreshold());
+        System.out.println("CurrentStock: " + p.getCurrentStock());
+        System.out.println("-------------------------------------------------");
     }
 }
