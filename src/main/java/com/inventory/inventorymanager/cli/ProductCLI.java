@@ -128,9 +128,7 @@ public class ProductCLI {
             System.out.println("An error occurred: " + e.getMessage());
         }
 
-        if (retryPrompt()) {
-            return; // This return is not redundant since it serves to exit the method prematurely based on a condition
-        }
+        promptForAnotherOperationOrExit();
     }
 
     public void createProduct(long productID, String productName, LocalDate expiryDate, Integer timeDurationForMarkDown,  Integer minThreshold, Integer maxThreshold, Integer currentStock){
@@ -198,7 +196,7 @@ public class ProductCLI {
                 System.out.println("An error occurred: " + e.getMessage());
             }
 
-        } while (!retryPrompt());
+        } while (!promptForAnotherOperationOrExit());
     }
 
 
@@ -209,14 +207,16 @@ public class ProductCLI {
         System.exit(0);
     }
 
-    private boolean retryPrompt() {
+
+    private boolean promptForAnotherOperationOrExit() {
         while (true) {
-            System.out.println("Do you want to try again? (y/n): ");
+            System.out.println("Do you want to perform another operation? (y/n): ");
             String choice = scanner.nextLine().trim().toLowerCase();
             if ("y".equals(choice)) {
-                return false;  // Indicate that the user wants to retry
+                return true;  // Continue with another operation
             } else if ("n".equals(choice)) {
-                return true;  // Indicate that the user doesn't want to retry
+                quitApplication();  // If user chooses not to perform another operation, exit the program
+                return false;  // This line won't be reached, but it's good to have a definitive return value
             } else {
                 System.out.println("Invalid choice. Please enter 'y' or 'n'.");
             }

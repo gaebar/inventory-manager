@@ -81,7 +81,6 @@ public class ProductService {
      * Creates a product and stores it in the database.
      * Sets default values for ExpiryDate and TimeDurationForMarkDown if not provided.
      *
-     * @param newProduct The product entity to be created.
      * @return The created product.
      * @throws DataIntegrityViolationException if a product with the given ProductID already exists.
      */
@@ -117,20 +116,6 @@ public class ProductService {
     @Transactional
     public boolean existProductID(Long id) {
         return productRepository.existsById(id);
-    }
-
-    /**
-     * Deletes a product by its ID.
-     *
-     * @param id The ID of the product to be deleted.
-     * @throws ProductNotFoundException if the product is not found.
-     */
-    @Transactional
-    public void deleteProduct(Long id) {
-        if (!productRepository.existsById(id)) {
-            throw new ProductNotFoundException("Product with ID " + id + " not found.");
-        }
-        productRepository.deleteById(id);
     }
 
     /**
