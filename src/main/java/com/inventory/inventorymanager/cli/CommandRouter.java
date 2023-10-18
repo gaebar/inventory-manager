@@ -68,16 +68,16 @@ public class CommandRouter {
                     System.out.println("You chose: Display Product to Refill");
                     productCLI.displayProductToRefill();
                     break;
-                    
-//                case "5":
-//                    System.out.println("You chose: Display All Products Count");
-//                    productCLI.displayAllProductsCount();
-//                    break;
 
-//                case "6":
-//                    System.out.println("You chose: Display Product Count");
-//                      productCLI.displayProductCount();
-//                    break;
+                case "5":
+                    System.out.println("You chose: Display All Products Count");
+                    productCLI.displayAllProductsCount();
+                    break;
+
+                case "6":
+                    System.out.println("You chose: Display Product Count");
+                    productCLI.displayProductCount();
+                    break;
 
 //                case "7":
 //                    System.out.println("You chose: Display Products by Expiry Date");

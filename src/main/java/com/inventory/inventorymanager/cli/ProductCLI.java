@@ -138,7 +138,7 @@ public class ProductCLI {
 
     public void createProduct(long productID, String productName, LocalDate expiryDate, Integer timeDurationForMarkDown,  Integer minThreshold, Integer maxThreshold, Integer currentStock){
         Product createdProduct = productService.createProduct(productID, productName, expiryDate, timeDurationForMarkDown, minThreshold, maxThreshold, currentStock);
-        System.out.println("ProductName with the ProductID " + createdProduct.getProductID() + " created successfully.");
+        System.out.println("ProductName " + createdProduct.getProductName() + " with the ProductID " + createdProduct.getProductID() + " created successfully.");
         LOGGER.info("Product created successfully with ID: " + createdProduct.getProductID());
     }
 
@@ -275,6 +275,63 @@ public class ProductCLI {
         }
         promptForAnotherOperationOrExit();
     }
+
+    public void displayAllProductsCount() {
+        try {
+            // Fetch all products from the service
+            List<Product> allProducts = productService.getProducts();
+
+            // Check if there are any products
+            if (allProducts.isEmpty()) {
+                LOGGER.warning("No products found on the shelf.");
+                System.out.println("No products found on the shelf.");
+            } else {
+                int totalProducts = allProducts.size();
+                LOGGER.info("Total number of products on the shelf: " + totalProducts);
+                System.out.println("Total number of products on the shelf: " + totalProducts);
+            }
+        } catch (Exception e) {
+            LOGGER.severe("An error occurred: " + e.getMessage());
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        promptForAnotherOperationOrExit();
+    }
+
+    /**
+     * Display the count of a product based on its ProductID.
+     */
+    public void displayProductCount() {
+        try {
+            System.out.println("Enter ProductID to get its count on the shelf:  ");  // Prompt the user to enter ProductID
+            long productID = Long.parseLong(scanner.nextLine());
+
+            // Fetch the product with the given ID
+            Product product = productService.getProductById(productID);
+
+            // If the product doesn't exist, display a relevant message and return
+            if (product == null) {
+                LOGGER.warning("Product with given ProductID not found.");
+                System.out.println("Product with given ProductID not found.");
+                return;
+            }
+
+            // Display the current stock of the product
+            System.out.println("-------------------------------------------------");
+            System.out.println("ProductID: " + product.getProductID());
+            System.out.println("ProductName: " + product.getProductName());
+            System.out.println("CurrentStock: " + product.getCurrentStock());
+            System.out.println("-------------------------------------------------");
+
+        } catch (NumberFormatException e) {
+            LOGGER.warning("Invalid ProductID format. Please enter a valid number.");
+            System.out.println("Invalid ProductID format. Please enter a valid number.");
+        } catch (Exception e) {
+            LOGGER.severe("An error occurred: " + e.getMessage());
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        promptForAnotherOperationOrExit();
+    }
+
 
 
     public void quitApplication() {
