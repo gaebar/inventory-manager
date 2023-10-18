@@ -71,22 +71,22 @@ public class CommandRouter {
 
                 case "5":
                     System.out.println("You chose: Display All Products Count");
-                    productCLI.displayAllProductsCount();
+                    productCLI.displayProductCount();
                     break;
 
                 case "6":
                     System.out.println("You chose: Display Product Count");
-                    productCLI.displayProductCount();
+                    productCLI.displayProductCountUserChoice();
                     break;
 
                 case "7":
                     System.out.println("You chose: Display All Products by Expiry Date");
-                    productCLI.displayAllProductsExpiryDate();
+                    productCLI.displayProductExpiryDate();
                     break;
 
                 case "8":
                     System.out.println("You chose: Display Product by Expiry Date");
-                    productCLI.displayProductExpiryDate();
+                    productCLI.displayProductExpiryDateUserChoice();
                     break;
 
                case "9":

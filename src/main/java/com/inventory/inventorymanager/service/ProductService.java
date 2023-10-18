@@ -63,6 +63,8 @@ public class ProductService {
         return product.getMaxThreshold() - product.getCurrentStock();
     }
 
+    // TODO: public int getProductCount(Product product){}
+
     /**
      * Validates the product entity before attempting to save it.
      * This internal method is invoked by the createProduct() method.
@@ -188,7 +190,6 @@ public class ProductService {
         public List<Product> displayProductToRefill (Long productId){
             return productRepository.findByCurrentStockLessThanAndProductID(10, productId);
         }
-
 
 
         /**

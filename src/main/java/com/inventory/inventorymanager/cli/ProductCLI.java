@@ -96,7 +96,7 @@ public class ProductCLI {
 
         while (true) {
             try {
-                System.out.println("Enter MinThreshold: ");
+                System.out.println("Enter MinThreshold for the shelves: ");
                 minThreshold = Integer.parseInt(scanner.nextLine());
                 break;  // Exit the loop when valid input is given
             } catch (NumberFormatException e) {
@@ -106,7 +106,7 @@ public class ProductCLI {
 
         while (true) {
             try {
-                System.out.println("Enter MaxThreshold: ");
+                System.out.println("Enter MaxThreshold for the shelves: ");
                 maxThreshold = Integer.parseInt(scanner.nextLine());
                 break;  // Exit the loop when valid input is given
             } catch (NumberFormatException e) {
@@ -116,7 +116,7 @@ public class ProductCLI {
 
         while (true) {
             try {
-                System.out.println("Enter CurrentStock: ");
+                System.out.println("Enter CurrentStock on the shelves: ");
                 currentStock = Integer.parseInt(scanner.nextLine());
                 break;  // Exit the loop when valid input is given
             } catch (NumberFormatException e) {
@@ -144,7 +144,6 @@ public class ProductCLI {
         System.out.println("ProductName " + createdProduct.getProductName() + " with the ProductID " + createdProduct.getProductID() + " created successfully.");
         LOGGER.info("Product created successfully with ID: " + createdProduct.getProductID());
     }
-
 
     public void displayProduct() {
         System.out.println("To display all products, leave both the ProductName and ProductID fields blank.");
@@ -196,11 +195,9 @@ public class ProductCLI {
         promptForAnotherOperationOrExit();
     }
 
-
-
     public void displayProductToRefillUserChoice() {
         try {
-            System.out.println("Enter ProductID to display a single product, or leave empty to see all products that need refill: ");
+            System.out.println("Enter ProductID to display a single product, or leave empty to view all products that need refill: ");
             String productIDString = scanner.nextLine();
 
             if (productIDString == null) {
@@ -233,8 +230,8 @@ public class ProductCLI {
                 if (p.getCurrentStock() <= p.getMinThreshold()) {
                     productsToRefillExist = true;
 
-                    int quantityToReplenish = productService.getQuantityToRefill(p);
                     // Calculate the quantity to be replenished
+                    int quantityToReplenish = productService.getQuantityToRefill(p);
 
                     System.out.println("-------------------------------------------------");
                     System.out.println("ProductID: " + p.getProductID());
@@ -242,7 +239,7 @@ public class ProductCLI {
                     System.out.println("CurrentStock: " + p.getCurrentStock());
                     System.out.println("MinThreshold: " + p.getMinThreshold());
                     System.out.println("MaxThreshold: " + p.getMaxThreshold());
-                    System.out.println("Quantity to Replenish: " + quantityToReplenish);
+                    System.out.println("Quantity on the shelves to Replenish: " + quantityToReplenish);
                     System.out.println("-------------------------------------------------");
                 }
             }
@@ -283,7 +280,7 @@ public class ProductCLI {
                 System.out.println("CurrentStock: " + product.getCurrentStock());
                 System.out.println("MinThreshold: " + product.getMinThreshold());
                 System.out.println("MaxThreshold: " + product.getMaxThreshold());
-                System.out.println("Quantity to Replenish: " + quantityToReplenish);
+                System.out.println("Quantity on the shelves to Replenish: " + quantityToReplenish);
                 System.out.println("-------------------------------------------------");
             } else {
                 LOGGER.info("Product is sufficiently stocked and does not need replenishment.");
@@ -298,21 +295,21 @@ public class ProductCLI {
         }
     }
 
-
-    public void displayAllProductsCount() {
+    public void displayProductCountUserChoice(){
         try {
-            // Fetch all products from the service
-            List<Product> allProducts = productService.getProducts();
+            System.out.println("Enter a ProductID to see its count on the shelf, or press Enter to view counts for all products.");
+            String productIDString = scanner.nextLine();
 
-            // Check if there are any products
-            if (allProducts.isEmpty()) {
-                LOGGER.warning("No products found on the shelf.");
-                System.out.println("No products found on the shelf.");
+            if (productIDString == null || productIDString.trim().isEmpty()) {
+                displayProductCount();
             } else {
-                int totalProducts = allProducts.size();
-                LOGGER.info("Total number of products on the shelf: " + totalProducts);
-                System.out.println("Total number of products on the shelf: " + totalProducts);
+                long productID = Long.parseLong(productIDString);
+                displayProductCount(productID);
             }
+
+        } catch (NumberFormatException e) {
+            LOGGER.warning("Invalid ProductID format. Please enter a valid number.");
+            System.out.println("Invalid ProductID format. Please enter a valid number.");
         } catch (Exception e) {
             LOGGER.severe("An error occurred: " + e.getMessage());
             System.out.println("An error occurred: " + e.getMessage());
@@ -320,14 +317,33 @@ public class ProductCLI {
         promptForAnotherOperationOrExit();
     }
 
-    /**
-     * Display the count of a product based on its ProductID.
-     */
     public void displayProductCount() {
         try {
-            System.out.println("Enter ProductID to get its count on the shelf:  ");  // Prompt the user to enter ProductID
-            long productID = Long.parseLong(scanner.nextLine());
+            // Fetch all products from the service
+            List<Product> allProducts = productService.getProducts();
 
+            if (allProducts.isEmpty()) {
+                LOGGER.warning("No products found on the shelf.");
+                System.out.println("No products found on the shelf.");
+                return;
+            }
+
+            // Displaying the number/weight of all products on the shelf
+            for (Product product : allProducts) {
+                System.out.println("-------------------------------------------------");
+                System.out.println("ProductID: " + product.getProductID());
+                System.out.println("ProductName: " + product.getProductName());
+                System.out.println("CurrentStock on shelves: " + product.getCurrentStock());
+                System.out.println("-------------------------------------------------");
+            }
+        } catch (Exception e) {
+            LOGGER.severe("An error occurred: " + e.getMessage());
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        promptForAnotherOperationOrExit();
+    }
+    public void displayProductCount(long productID) {
+        try {
             // Fetch the product with the given ID
             Product product = productService.getProductById(productID);
 
@@ -342,7 +358,7 @@ public class ProductCLI {
             System.out.println("-------------------------------------------------");
             System.out.println("ProductID: " + product.getProductID());
             System.out.println("ProductName: " + product.getProductName());
-            System.out.println("CurrentStock: " + product.getCurrentStock());
+            System.out.println("CurrentStock on shelves: " + product.getCurrentStock());
             System.out.println("-------------------------------------------------");
 
         } catch (NumberFormatException e) {
@@ -355,10 +371,12 @@ public class ProductCLI {
         promptForAnotherOperationOrExit();
     }
 
-    public void displayAllProductsExpiryDate() {
+    public void displayProductExpiryDateUserChoice() {
+    }
+    public void displayProductExpiryDate() {
     }
 
-    public void displayProductExpiryDate() {
+    public void displayProductExpiryDate(long productID) {
     }
 
     public void displayExpiredProducts() {
@@ -370,14 +388,12 @@ public class ProductCLI {
     public void displayProductsForMarkDown() {
     }
 
-
     public void quitApplication() {
         System.out.println("Thank you for using the Product Management System! Have a great day!");
         LOGGER.info("Exiting application");
         scanner.close();
         System.exit(0);
     }
-
 
     private void promptForAnotherOperationOrExit() {
         System.out.println("\nPress Enter to return to the main menu...");
@@ -392,7 +408,7 @@ public class ProductCLI {
         System.out.println("TimeDurationForMarkDown: " + p.getTimeDurationForMarkDown());
         System.out.println("MinThreshold: " + p.getMinThreshold());
         System.out.println("MaxThreshold: " + p.getMaxThreshold());
-        System.out.println("CurrentStock: " + p.getCurrentStock());
+        System.out.println("CurrentStock on shelves: " + p.getCurrentStock());
         System.out.println("-------------------------------------------------");
     }
 }
