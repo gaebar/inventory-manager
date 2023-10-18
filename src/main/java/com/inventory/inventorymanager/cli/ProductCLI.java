@@ -332,6 +332,14 @@ public class ProductCLI {
         promptForAnotherOperationOrExit();
     }
 
+    public void displayAllProductsExpiryDate(){}
+    public void displayProductExpiryDate(){}
+
+    public void displayExpiredProducts(){}
+
+    public void displayProductsInMarkDown(){}
+
+    public void displayProductsForMarkDown(){}
 
 
     public void quitApplication() {

@@ -79,28 +79,31 @@ public class CommandRouter {
                     productCLI.displayProductCount();
                     break;
 
-//                case "7":
-//                    System.out.println("You chose: Display Products by Expiry Date");
-//                      productCLI.displayProductExpiryDate();
-//                    break;
-//                case "8":
-//                    System.out.println("You chose: Display All Products by Expiry Date");
-//                  productCLI.displayAllProductsExpiryDate()
-//                    break;
+                case "7":
+                    System.out.println("You chose: Display All Products by Expiry Date");
+                    productCLI.displayAllProductsExpiryDate();
+                    break;
 
-//                case "9":
-//                    System.out.println("You chose: Display Expired Products");
-//
-//                    break;
-//                case "10":
-//                    System.out.println("You chose: Display Products in Markdown");
-//
-//                    break;
+                case "8":
+                    System.out.println("You chose: Display Product by Expiry Date");
+                    productCLI.displayProductExpiryDate();
+                    break;
 
-//                case "11":
-//                    System.out.println("You chose: Display Products for Future Markdown");
-//
-//                    break;
+               case "9":
+                   System.out.println("You chose: Display Expired Products");
+                    productCLI.displayExpiredProducts();
+                    break;
+
+                case "10":
+                    System.out.println("You chose: Display Products in Markdown");
+                    productCLI.displayProductsInMarkDown();
+                    break;
+
+               case "11":
+                   System.out.println("You chose: Display Products for Future Markdown");
+                   productCLI.displayProductsForMarkDown();
+                   break;
+
                 case "12":
                     System.out.println("You chose: Quit");
                     productCLI.quitApplication();
