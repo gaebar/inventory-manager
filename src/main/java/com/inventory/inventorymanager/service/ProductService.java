@@ -59,6 +59,9 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException("Product with ID " + id + " not found."));
     }
 
+    public int getQuantityToRefill(Product product) {
+        return product.getMaxThreshold() - product.getCurrentStock();
+    }
 
     /**
      * Validates the product entity before attempting to save it.
@@ -185,6 +188,8 @@ public class ProductService {
         public List<Product> displayProductToRefill (Long productId){
             return productRepository.findByCurrentStockLessThanAndProductID(10, productId);
         }
+
+
 
         /**
          * Retrieves the current stock of a product.

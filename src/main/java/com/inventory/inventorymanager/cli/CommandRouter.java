@@ -61,12 +61,12 @@ public class CommandRouter {
 
                 case "3":
                     System.out.println("You chose: Display All Products to Refill");
-                    productCLI.displayAllProductsToRefill();
+                    productCLI.displayProductToRefill();
                     break;
 
                 case "4":
                     System.out.println("You chose: Display Product to Refill");
-                    productCLI.displayProductToRefill();
+                    productCLI.displayProductToRefillUserChoice();
                     break;
 
                 case "5":
