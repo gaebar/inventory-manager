@@ -372,20 +372,160 @@ public class ProductCLI {
     }
 
     public void displayProductExpiryDateUserChoice() {
+        try {
+            System.out.println("Enter a ProductID to see its expiry date, or press Enter to view expiry dates for all products.");
+            String productIDString = scanner.nextLine();
+
+            if (productIDString == null || productIDString.trim().isEmpty()) {
+                displayProductExpiryDate();
+            } else {
+                long productID = Long.parseLong(productIDString);
+                displayProductExpiryDate(productID);
+            }
+
+        } catch (NumberFormatException e) {
+            LOGGER.warning("Invalid ProductID format. Please enter a valid number.");
+            System.out.println("Invalid ProductID format. Please enter a valid number.");
+        } catch (Exception e) {
+            LOGGER.severe("An error occurred: " + e.getMessage());
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        promptForAnotherOperationOrExit();
     }
+
     public void displayProductExpiryDate() {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            List<Product> allProducts = productService.getProducts();
+
+            if (allProducts.isEmpty()) {
+                LOGGER.warning("No products found.");
+                System.out.println("No products found.");
+                return;
+            }
+
+            for (Product product : allProducts) {
+                System.out.println("-------------------------------------------------");
+                System.out.println("ProductID: " + product.getProductID());
+                System.out.println("ProductName: " + product.getProductName());
+                System.out.println("ExpiryDate: " + product.getExpiryDate().format(formatter));
+                System.out.println("-------------------------------------------------");
+            }
+        } catch (Exception e) {
+            LOGGER.severe("An error occurred: " + e.getMessage());
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        promptForAnotherOperationOrExit();
     }
 
     public void displayProductExpiryDate(long productID) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            Product product = productService.getProductById(productID);
+
+            if (product == null) {
+                LOGGER.warning("Product with given ProductID not found.");
+                System.out.println("Product with given ProductID not found.");
+                return;
+            }
+
+            System.out.println("-------------------------------------------------");
+            System.out.println("ProductID: " + product.getProductID());
+            System.out.println("ProductName: " + product.getProductName());
+            System.out.println("ExpiryDate: " + product.getExpiryDate().format(formatter));
+            System.out.println("-------------------------------------------------");
+
+        } catch (Exception e) {
+            LOGGER.severe("An error occurred: " + e.getMessage());
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        promptForAnotherOperationOrExit();
     }
 
     public void displayExpiredProducts() {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            List<Product> expiredProducts = productService.displayExpiredProducts();
+
+            // Make this message very noticeable
+            System.out.println("========== DISPLAYING EXPIRED PRODUCTS ==========");
+
+            if (expiredProducts.isEmpty()) {
+                LOGGER.warning("No expired products on the shelf.");
+                System.out.println("No expired products on the shelf.");
+                return;
+            }
+
+            for (Product product : expiredProducts) {
+                System.out.println("-------------------------------------------------");
+                System.out.println("ProductID: " + product.getProductID());
+                System.out.println("ProductName: " + product.getProductName());
+                System.out.println("ExpiredDate: " + product.getExpiryDate().format(formatter));
+                System.out.println("-------------------------------------------------");
+            }
+        } catch (Exception e) {
+            LOGGER.severe("An error occurred: " + e.getMessage());
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        promptForAnotherOperationOrExit();
     }
+
 
     public void displayProductsInMarkDown() {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            List<Product> markedDownProducts = productService.displayProductsInMarkDown();
+
+            System.out.println("========== DISPLAYING PRODUCTS IN MARKDOWN ==========");
+
+            if (markedDownProducts.isEmpty()) {
+                LOGGER.warning("No products are currently marked down.");
+                System.out.println("No products are currently marked down.");
+                return;
+            }
+
+            for (Product product : markedDownProducts) {
+                LocalDate calculatedMarkDownDate = product.getExpiryDate().minusDays(product.getTimeDurationForMarkDown());
+                System.out.println("-------------------------------------------------");
+                System.out.println("ProductID: " + product.getProductID());
+                System.out.println("ProductName: " + product.getProductName());
+                System.out.println("Calculated MarkdownDate: " + calculatedMarkDownDate.format(formatter));
+                System.out.println("-------------------------------------------------");
+            }
+        } catch (Exception e) {
+            LOGGER.severe("An error occurred: " + e.getMessage());
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        promptForAnotherOperationOrExit();
     }
 
+
     public void displayProductsForMarkDown() {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            List<Product> productsForMarkDown = productService.displayProductsForMarkDown();
+
+            System.out.println("========== DISPLAYING PRODUCTS FOR FUTURE MARKDOWN ==========");
+
+            if (productsForMarkDown.isEmpty()) {
+                LOGGER.warning("No products are scheduled for markdown within the next week.");
+                System.out.println("No products are scheduled for markdown within the next week.");
+                return;
+            }
+
+            for (Product product : productsForMarkDown) {
+                LocalDate calculatedMarkDownDate = product.getExpiryDate().minusDays(product.getTimeDurationForMarkDown());
+                System.out.println("-------------------------------------------------");
+                System.out.println("ProductID: " + product.getProductID());
+                System.out.println("ProductName: " + product.getProductName());
+                System.out.println("Future Calculated MarkdownDate: " + calculatedMarkDownDate.format(formatter));
+                System.out.println("-------------------------------------------------");
+            }
+        } catch (Exception e) {
+            LOGGER.severe("An error occurred: " + e.getMessage());
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        promptForAnotherOperationOrExit();
     }
 
     public void quitApplication() {

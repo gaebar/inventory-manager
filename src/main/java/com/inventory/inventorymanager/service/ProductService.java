@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.time.temporal.ChronoUnit;
+
 
 /**
  * Service class for managing products.
@@ -216,24 +218,29 @@ public class ProductService {
         return productRepository.findByExpiryDateBefore(today);
     }
 
+
     /**
-     * Retrieves a list of products that are currently in markdown.
+     * Retrieves a list of products that are past their Markdown Date.
      *
-     * @return List of products in markdown.
+     * @return List of products past Markdown Date.
      */
     public List<Product> displayProductsInMarkDown() {
         LocalDate today = LocalDate.now();
-        return productRepository.findInMarkDown(today);
+        // Logic to find products past their Markdown Date.
+        // Implement a new method in ProductRepository to achieve this.
+        return productRepository.findPastMarkdownDate(today);
     }
 
     /**
-     * Retrieves a list of products that need to be marked down within a week.
+     * Retrieves a list of products that will be marked down within a week.
      *
-     * @return List of products for markdown.
+     * @return List of products for future markdown.
      */
     public List<Product> displayProductsForMarkDown() {
         LocalDate today = LocalDate.now();
         LocalDate oneWeekFromNow = today.plusDays(7);
-        return productRepository.findForMarkDown(today, oneWeekFromNow);
+        // Logic to find products that will be marked down within a week.
+        // Implement a new method in ProductRepository to achieve this.
+        return productRepository.findForMarkDownWithinWeek(today, oneWeekFromNow);
     }
 }

@@ -167,6 +167,7 @@ public class Product {
         this.currentStock = currentStock;
     }
 
+
     @Override
     public String toString() {
         return "Product{" +

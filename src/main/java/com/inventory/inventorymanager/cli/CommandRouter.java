@@ -37,8 +37,8 @@ public class CommandRouter {
             System.out.println("4. Display Product to Refill");
             System.out.println("5. Display All Products Count");
             System.out.println("6. Display Product Count");
-            System.out.println("7. Display Products by Expiry Date");
-            System.out.println("8. Display All Products by Expiry Date");
+            System.out.println("7. Display All Products by Expiry Date");
+            System.out.println("8. Display Product by Expiry Date");
             System.out.println("9. Display Expired Products");
             System.out.println("10. Display Products in Markdown");
             System.out.println("11. Display Products for Future Markdown");
