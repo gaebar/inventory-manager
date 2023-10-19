@@ -25,15 +25,26 @@ _Source: [Business Insider](https://www.businessinsider.com/wal-marts-ceo-reveal
 ## Project Requirements
 For detailed project requirements, see [Project Requirements](ProjectRequirements.md).
 
-## System Requirements
-- Java JDK 11 or above
-- MySQL or MS Access for database (optional for extra credit)
-- Web or client-based GUI (optional for extra credit)
+##  Technologies and Tools Used
+### Backend Development:
+- **Spring Boot:** The core framework used for building the application.
+- **Maven:** Dependency management and project building tool.
+- **Spring Data JPA (Java Persistence API):** Simplified database interaction using Java programming. It provides a platform to work directly with objects instead of using SQL statements.
+- **Hibernate:** ORM (Object-Relational Mapping) tool that enables Java application to interact with the database.
 
-# Installation Steps
+### Database:
+- **MySQL:** The primary relational database where all application data is stored.
+  
+### Environment and Configuration:
+- ** GitHub Secrets:** Instead of the traditional .env file for environment variables, I experimented with GitHub Secrets to secure and manage sensitive information.
 
-1. Clone the Repository
+## User Interface
+### Command Line Interface (CLI):
+The application provides a Command Line Interface (CLI) for users to interact with the system. This interface ensures a seamless experience without the need for a GUI, making it lightweight and straightforward. Users can perform all necessary operations, like managing inventory and tracking expiry dates, directly from the command line.
 
+## Installation Steps
+
+1. **Clone the Repository:**
 ```bash
 git clone https://github.com/gaebar/inventory-manager.git
 ```
@@ -43,15 +54,31 @@ git clone https://github.com/gaebar/inventory-manager.git
 cd inventory-manager
 ```
 
-3. Compile the Java files:
+3. Build the Project:
+- For the default configuration (application.properties):
 ```bash
-javac *.java
+mvn clean install
+```
+
+- To use the GitHub Secrets configuration (application-github.properties):
+```bash
+mvn clean install -Dspring.profiles.active=github
 ```
 
 4. Run the application:
-```bash
-java Main
-```
+- **Using an IDE:**
+  If you're using an IDE like IntelliJ IDEA or Eclipse, you can directly run the `InventoryManagerApplication` class.
+  
+- **Using Command Line:** 
+  - **Default Configuration:**
+    ```bash
+    mvn spring-boot:run
+    ```
+     
+  - **Using GitHub Secrets Configuration:**
+    ```bash
+    mvn spring-boot:run -Dspring.profiles.active=github
+    ```
 
 ### Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
