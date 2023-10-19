@@ -12,4 +12,4 @@ VALUES  (3, 'Baby Diapers Infant Comfort Plus', '2027-12-09', 5, 5, 15, 8);
 
 -- 4. Number of Organic Bananas on the shelf needs to be between 20 and 60.
 INSERT INTO inventory_manager.products (product_id, product_name, expiry_date, time_duration_for_markdown, min_threshold, max_threshold, current_stock)
-VALUES  (4, 'Organic Bananas', '2023-05-15', 10, 20, 60, 30);
+VALUES  (4, 'Organic Bananas', '2023-10-21', 10, 20, 60, 30);
