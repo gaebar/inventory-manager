@@ -57,7 +57,7 @@ cd inventory-manager
 3. Build the Project:
 - For the default configuration (application.properties):
 ```bash
-mvn clean install
+mvn clean install -Dspring.profiles.active=default
 ```
 
 - To use the GitHub Secrets configuration (application-github.properties):
