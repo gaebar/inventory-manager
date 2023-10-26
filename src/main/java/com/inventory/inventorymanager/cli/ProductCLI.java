@@ -32,7 +32,6 @@ public class ProductCLI {
         int maxThreshold;
         int currentStock;
 
-
         while (true) {
             try {
                 System.out.println("Enter ProductName: ");
@@ -146,6 +145,9 @@ public class ProductCLI {
         System.out.println("To display all products, leave both the ProductName and ProductID fields blank.");
         System.out.println("Enter ProductName (optional): ");
         String productName = scanner.nextLine();
+        if (productName.isEmpty()) {
+            productName = null;
+        }
 
         System.out.println("Enter ProductID (optional): ");
         String productIdStr = scanner.nextLine();
@@ -197,7 +199,7 @@ public class ProductCLI {
             System.out.println("Enter ProductID to display a single product, or leave empty to view all products that need refill: ");
             String productIDString = scanner.nextLine();
 
-            if (productIDString == null) {
+            if (productIDString.isEmpty()) {
                 displayProductToRefill();
             } else {
                 long productID = Long.parseLong(productIDString);
