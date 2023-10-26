@@ -1,18 +1,16 @@
 package com.inventory.inventorymanager.cli;
 import com.inventory.inventorymanager.service.ProductService;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Logger;
-// @Profile("cli")
+
 @Component
-public class CommandRouter {
+@Profile("local")
+public class CommandRouter implements CommandLineRunner{
     private final static Logger LOGGER = Logger.getLogger(CommandRouter.class.getName());
 
     private final ProductService productService;
@@ -25,9 +23,8 @@ public class CommandRouter {
     }
 
 
-    @PostConstruct
-    @Profile("local")
-    public void start() {
+   @Override
+    public void run(String... args)  {
  //       String[] activeProfiles = env.getActiveProfiles();
  //       if (Arrays.asList(activeProfiles).contains("cli")) {
             Scanner scanner = new Scanner(System.in);

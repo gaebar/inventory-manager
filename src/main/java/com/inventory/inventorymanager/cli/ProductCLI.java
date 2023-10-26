@@ -4,8 +4,6 @@ import com.inventory.inventorymanager.exceptions.ProductAlreadyExistsException;
 import com.inventory.inventorymanager.model.Product;
 import com.inventory.inventorymanager.service.ProductService;
 
-import org.springframework.stereotype.Component;
-
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -14,7 +12,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Logger;
 
-@Component
 public class ProductCLI {
     private static final Logger LOGGER = Logger.getLogger(ProductCLI.class.getName());
 
