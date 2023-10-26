@@ -1,4 +1,4 @@
-/*
+
 package com.inventory.inventorymanager.service;
 
 import com.inventory.inventorymanager.model.Product;
@@ -59,4 +59,4 @@ public class ProductServiceTest {
         assertEquals(2, result.size());
     }
 }
-*/
+
