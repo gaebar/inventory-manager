@@ -4,13 +4,13 @@ import com.inventory.inventorymanager.exceptions.ProductAlreadyExistsException;
 import com.inventory.inventorymanager.exceptions.ProductNotFoundException;
 import com.inventory.inventorymanager.model.Product;
 import com.inventory.inventorymanager.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,20 +22,18 @@ import java.util.List;
 @Service
 public class ProductService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
     private final ProductRepository productRepository;
-
-    @Autowired
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
-
     @Value("${default.expiry.duration}")
     private int defaultExpiryDuration;
 
     @Value("${default.markdown.duration}")
     private int defaultMarkdownDuration;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
+    @Autowired
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     /**
      * Fetches all products from the database.
@@ -54,8 +52,7 @@ public class ProductService {
      * @throws ProductNotFoundException if the product is not found.
      */
     public Product getProductById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product with ID " + id + " not found."));
+        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with ID " + id + " not found."));
     }
 
     public int getQuantityToRefill(Product product) {
@@ -73,7 +70,7 @@ public class ProductService {
 
 
     @Transactional
-    public Product createProduct(long productID, String productName, LocalDate expiryDate, Integer timeDurationForMarkDown,  Integer minThreshold, Integer maxThreshold, Integer currentStock) {
+    public Product createProduct(long productID, String productName, LocalDate expiryDate, Integer timeDurationForMarkDown, Integer minThreshold, Integer maxThreshold, Integer currentStock) {
 
         Product newProduct = new Product(productID, productName, expiryDate, timeDurationForMarkDown, minThreshold, maxThreshold, currentStock);
 
@@ -115,10 +112,9 @@ public class ProductService {
      * @return List of products expiring before the specified date.
      */
 
-    public Product displayProduct (String productName, Long productId){
+    public Product displayProduct(String productName, Long productId) {
         if (productName != null) {
-            return productRepository.findByProductName(productName)
-                    .orElseThrow(() -> new ProductNotFoundException("Product with name " + productName + " not found."));
+            return productRepository.findByProductName(productName).orElseThrow(() -> new ProductNotFoundException("Product with name " + productName + " not found."));
         } else if (productId != null) {
             return getProductById(productId); // Reuse the existing method.
         } else {
@@ -154,14 +150,8 @@ public class ProductService {
      */
     public List<Product> displayProductsInMarkDown() {
         LocalDate today = LocalDate.now();
-        List<Product> allProducts = getProducts();
-        List<Product> productsPastMarkdown = new ArrayList<>();
-        for (Product product : allProducts) {
-            LocalDate calculatedDate = calculateMarkdownThresholdDate(product);
-            if (calculatedDate.isBefore(today)) {
-                productsPastMarkdown.add(product);
-            }
-        }
+
+        List<Product> productsPastMarkdown = productRepository.findPastMarkdownDate(today);
         if (productsPastMarkdown.isEmpty()) {
             System.out.println("No products past their Markdown Date found.");
         }
@@ -175,18 +165,10 @@ public class ProductService {
      */
     public List<Product> displayProductsForMarkDown() {
         LocalDate today = LocalDate.now();
-        LocalDate oneWeekFromNow = today.plusDays(7);
-        List<Product> allProducts = getProducts();
-        List<Product> productsForFutureMarkdown = new ArrayList<>();
-        for (Product product : allProducts) {
-            LocalDate calculatedDate = calculateMarkdownThresholdDate(product);
-            if (calculatedDate != null && (calculatedDate.isAfter(today) || calculatedDate.isEqual(today)) && calculatedDate.isBefore(oneWeekFromNow)) {
-                productsForFutureMarkdown.add(product);
-            }
-        }
-        if (productsForFutureMarkdown.isEmpty()) {
+        List<Product> productsForMarkDownWithinWeek = productRepository.findForMarkDownWithinWeek(today);
+        if (productsForMarkDownWithinWeek.isEmpty()) {
             System.out.println("No products to be marked down within a week found.");
         }
-        return productsForFutureMarkdown;
+        return productsForMarkDownWithinWeek;
     }
 }

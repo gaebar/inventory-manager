@@ -65,13 +65,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     boolean existsByProductID(Long productID);
 
 
-   // SELECT * FROM products WHERE DATE_SUB(expiry_date, INTERVAL time_duration_for_markdown DAY) < '2023-10-26'
+   //
 
-    @Query("SELECT p FROM Product p WHERE p.expiryDate < :calculatedDate")
-    List<Product> findPastMarkdownDate(@Param("calculatedDate") LocalDate calculatedDate);
+//    @Query("SELECT p FROM Product p WHERE p.expiryDate < :calculatedDate")
+    @Query(nativeQuery = true, value ="SELECT * FROM products WHERE DATE_SUB(expiry_date, INTERVAL time_duration_for_markdown DAY) < :today")
+    List<Product> findPastMarkdownDate(@Param("today") LocalDate calculatedDate);
 
-    @Query("SELECT p FROM Product p WHERE p.expiryDate BETWEEN :today AND :oneWeekFromNow")
-    List<Product> findForMarkDownWithinWeek(LocalDate today, LocalDate oneWeekFromNow);
+    @Query(nativeQuery = true, value ="SELECT * FROM products WHERE DATE_SUB(expiry_date, INTERVAL time_duration_for_markdown DAY) between :today  and DATE_ADD(:today, INTERVAL 7 DAY)")
+    List<Product> findForMarkDownWithinWeek(@Param("today") LocalDate calculatedDate);
 
 }
 

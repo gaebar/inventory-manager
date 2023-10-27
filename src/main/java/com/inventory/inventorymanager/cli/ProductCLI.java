@@ -485,10 +485,15 @@ public class ProductCLI {
 
             for (Product product : markedDownProducts) {
                 LocalDate calculatedMarkDownDate = product.getExpiryDate().minusDays(product.getTimeDurationForMarkDown());
+                long daysLeftToExpiry = java.time.temporal.ChronoUnit.DAYS.between( LocalDate.now(), product.getExpiryDate() ) ;
+
                 System.out.println("-------------------------------------------------");
-                System.out.println("ProductID: " + product.getProductID());
-                System.out.println("ProductName: " + product.getProductName());
-                System.out.println("Calculated MarkdownDate: " + calculatedMarkDownDate.format(formatter));
+                System.out.println("Product ID: " + product.getProductID());
+                System.out.println("Product Name: " + product.getProductName());
+                System.out.println("Expiry Date: " + product.getExpiryDate());
+                System.out.println("Markdown Days: " + product.getTimeDurationForMarkDown());
+                System.out.println("Calculated Date For Markdown: " + calculatedMarkDownDate.format(formatter));
+                System.out.println("Days until expiry date: " + daysLeftToExpiry);
                 System.out.println("-------------------------------------------------");
             }
         } catch (Exception e) {
@@ -514,10 +519,15 @@ public class ProductCLI {
 
             for (Product product : productsForMarkDown) {
                 LocalDate calculatedMarkDownDate = product.getExpiryDate().minusDays(product.getTimeDurationForMarkDown());
+                long daysLeftToMarkdown = java.time.temporal.ChronoUnit.DAYS.between( LocalDate.now(), calculatedMarkDownDate ) ;
+
                 System.out.println("-------------------------------------------------");
-                System.out.println("ProductID: " + product.getProductID());
-                System.out.println("ProductName: " + product.getProductName());
-                System.out.println("Future Calculated MarkdownDate: " + calculatedMarkDownDate.format(formatter));
+                System.out.println("Product ID: " + product.getProductID());
+                System.out.println("Product Name: " + product.getProductName());
+                System.out.println("Expiry Date: " + product.getExpiryDate());
+                System.out.println("Markdown Days: " + product.getTimeDurationForMarkDown());
+                System.out.println("Calculated Date For Markdown: " + calculatedMarkDownDate.format(formatter));
+                System.out.println("Days left to Mark Down: " + daysLeftToMarkdown);
                 System.out.println("-------------------------------------------------");
             }
         } catch (Exception e) {
