@@ -2,11 +2,8 @@ package com.inventory.inventorymanager;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-// import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-// @ActiveProfiles("test") // add if I want to create an application-test.properties
-
 class InventoryManagerApplicationTests {
 
 	@Test

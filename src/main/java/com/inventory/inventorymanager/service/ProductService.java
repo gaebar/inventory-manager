@@ -62,24 +62,6 @@ public class ProductService {
         return product.getMaxThreshold() - product.getCurrentStock();
     }
 
-    // TODO: public int getProductCount(Product product){}
-
-    /**
-     * Validates the product entity before attempting to save it.
-     * This internal method is invoked by the createProduct() method.
-     *
-     * @param product The product entity to validate.
-     */
-    private void validateProduct(Product product) {
-        if (product.getProductID() == null || product.getProductName() == null || product.getProductName().isEmpty()) {
-            LOGGER.error("Missing required fields");
-            throw new IllegalArgumentException("productID and ProductName are required. Other arguments take default values.");
-        }
-        if (productRepository.existsByProductID(product.getProductID())) {
-            LOGGER.error("Product with same ID already exists");
-            throw new ProductAlreadyExistsException("ProductName should have a uniqueID, the ProductName already exists with the same uniqueID: " + product.getProductID());
-        }
-    }
 
     /**
      * Creates a product and stores it in the database.
@@ -89,10 +71,9 @@ public class ProductService {
      * @throws DataIntegrityViolationException if a product with the given ProductID already exists.
      */
 
-    // TODO: change the API according to the requirements, it should take 4 mandatory arguments
+
     @Transactional
     public Product createProduct(long productID, String productName, LocalDate expiryDate, Integer timeDurationForMarkDown,  Integer minThreshold, Integer maxThreshold, Integer currentStock) {
-        //validateProduct(product);
 
         Product newProduct = new Product(productID, productName, expiryDate, timeDurationForMarkDown, minThreshold, maxThreshold, currentStock);
 
@@ -129,91 +110,29 @@ public class ProductService {
 
 
     /**
-     * Retrieves a list of products with stock below a given threshold.
+     * Retrieves a list of products expiring before a specified date.
      *
-     * @param threshold Stock threshold.
-     * @return List of products with stock below the threshold.
+     * @return List of products expiring before the specified date.
      */
-    public List<Product> getLowStockProducts(int threshold) {
-        return productRepository.findByCurrentStockLessThan(threshold);
-    }
 
-    /**
-     * Checks the stock thresholds of a given product and logs appropriate notifications.
-     *
-     * @param productId The ID of the product to check.
-     */
-    public void checkStockThresholds(Long productId) {
-        Product product = getProductById(productId);
-        int currentStock = product.getCurrentStock();
-        int minThreshold = product.getMinThreshold();
-        int maxThreshold = product.getMaxThreshold();
-
-        if (currentStock < minThreshold) {
-            System.out.println("Notification: Stock for product " + product.getProductName() + " is below the minimum threshold. Please replenish.");
-        } else if (currentStock > maxThreshold) {
-            System.out.println("Notification: Stock for product " + product.getProductName() + " has exceeded the maximum threshold. Please adjust.");
+    public Product displayProduct (String productName, Long productId){
+        if (productName != null) {
+            return productRepository.findByProductName(productName)
+                    .orElseThrow(() -> new ProductNotFoundException("Product with name " + productName + " not found."));
+        } else if (productId != null) {
+            return getProductById(productId); // Reuse the existing method.
+        } else {
+            // Display all products
+            List<Product> products = getProducts(); // Reuse the existing method.
+            // Logic to display these products in the console/GUI goes here.
+            return null; // Adjust return type based on your requirements.
         }
-    }
-
-        /**
-         * Retrieves a list of products expiring before a specified date.
-         *
-         * @return List of products expiring before the specified date.
-         */
-        public List<Product> getExpiringProducts (LocalDate expiryDate){
-            return productRepository.findByExpiryDateBefore(expiryDate);
-        }
-
-        public Product displayProduct (String productName, Long productId){
-            if (productName != null) {
-                return productRepository.findByProductName(productName)
-                        .orElseThrow(() -> new ProductNotFoundException("Product with name " + productName + " not found."));
-            } else if (productId != null) {
-                return getProductById(productId); // Reuse the existing method.
-            } else {
-                // Display all products
-                List<Product> products = getProducts(); // Reuse the existing method.
-                // Logic to display these products in the console/GUI goes here.
-                return null; // Adjust return type based on your requirements.
-            }
-        }
-
-        /**
-         * Retrieves a list of products that need refilling.
-         *
-         * @param productId The ID of the product.
-         * @return List of products that need refilling.
-         */
-        public List<Product> displayProductToRefill (Long productId){
-            return productRepository.findByCurrentStockLessThanAndProductID(10, productId);
-        }
-
-
-        /**
-         * Retrieves the current stock of a product.
-         *
-         * @param productId The ID of the product.
-         * @return Current stock of the product.
-         */
-        public int displayProductCount (Long productId){
-            Product product = getProductById(productId);
-            return product.getCurrentStock();
-        }
-
-    public LocalDate displayProductsExpiryDate(Long productId) {
-        if (productId == null) {
-            throw new IllegalArgumentException("ProductID is mandatory for displayProductsExpiryDate.");
-        }
-        Product product = getProductById(productId);
-        return product.getExpiryDate();
     }
 
     public List<Product> displayExpiredProducts() {
         LocalDate today = LocalDate.now();
         return productRepository.findByExpiryDateBefore(today);
     }
-
 
     /**
      * Calculates the date by subtracting the time duration for markdown from the expiry date of a product.
@@ -270,5 +189,4 @@ public class ProductService {
         }
         return productsForFutureMarkdown;
     }
-
 }
