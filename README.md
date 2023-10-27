@@ -57,12 +57,12 @@ cd inventory-manager
 3. Build the Project:
 - For the default configuration (application.properties):
 ```bash
-mvn clean install -Dspring.profiles.active=default
+mvn spring-boot:run -Dspring-boot.run.profiles=default
 ```
 
 - To use the GitHub Secrets configuration (application-github.properties):
 ```bash
-mvn clean install -Dspring.profiles.active=github
+mvn spring-boot:run -Dspring-boot.run.profiles=github
 ```
 
 4. Run the application:
