@@ -13,9 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.time.temporal.ChronoUnit;
-
 
 /**
  * Service class for managing products.
@@ -157,7 +156,6 @@ public class ProductService {
         }
     }
 
-
         /**
          * Retrieves a list of products expiring before a specified date.
          *
@@ -218,15 +216,37 @@ public class ProductService {
 
 
     /**
+     * Calculates the date by subtracting the time duration for markdown from the expiry date of a product.
+     *
+     * @param product The product entity.
+     * @return The calculated date.
+     */
+    public LocalDate calculateMarkdownThresholdDate(Product product) {
+        if (product == null || product.getExpiryDate() == null || product.getTimeDurationForMarkDown() == null) {
+            throw new IllegalArgumentException("Product, expiry date, and time duration for markdown must not be null");
+        }
+        return product.getExpiryDate().minusDays(product.getTimeDurationForMarkDown());
+    }
+
+    /**
      * Retrieves a list of products that are past their Markdown Date.
      *
      * @return List of products past Markdown Date.
      */
     public List<Product> displayProductsInMarkDown() {
         LocalDate today = LocalDate.now();
-        // Logic to find products past their Markdown Date.
-        // Implement a new method in ProductRepository to achieve this.
-        return productRepository.findPastMarkdownDate(today);
+        List<Product> allProducts = getProducts();
+        List<Product> productsPastMarkdown = new ArrayList<>();
+        for (Product product : allProducts) {
+            LocalDate calculatedDate = calculateMarkdownThresholdDate(product);
+            if (calculatedDate.isBefore(today)) {
+                productsPastMarkdown.add(product);
+            }
+        }
+        if (productsPastMarkdown.isEmpty()) {
+            System.out.println("No products past their Markdown Date found.");
+        }
+        return productsPastMarkdown;
     }
 
     /**
@@ -237,8 +257,18 @@ public class ProductService {
     public List<Product> displayProductsForMarkDown() {
         LocalDate today = LocalDate.now();
         LocalDate oneWeekFromNow = today.plusDays(7);
-        // Logic to find products that will be marked down within a week.
-        // Implement a new method in ProductRepository to achieve this.
-        return productRepository.findForMarkDownWithinWeek(today, oneWeekFromNow);
+        List<Product> allProducts = getProducts();
+        List<Product> productsForFutureMarkdown = new ArrayList<>();
+        for (Product product : allProducts) {
+            LocalDate calculatedDate = calculateMarkdownThresholdDate(product);
+            if (calculatedDate != null && (calculatedDate.isAfter(today) || calculatedDate.isEqual(today)) && calculatedDate.isBefore(oneWeekFromNow)) {
+                productsForFutureMarkdown.add(product);
+            }
+        }
+        if (productsForFutureMarkdown.isEmpty()) {
+            System.out.println("No products to be marked down within a week found.");
+        }
+        return productsForFutureMarkdown;
     }
+
 }

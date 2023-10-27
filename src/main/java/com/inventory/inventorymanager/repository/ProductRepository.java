@@ -3,6 +3,7 @@ package com.inventory.inventorymanager.repository;
 import com.inventory.inventorymanager.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -63,10 +64,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      */
     boolean existsByProductID(Long productID);
 
-    @Query("SELECT p FROM Product p WHERE p.expiryDate - p.timeDurationForMarkDown < :today")
-    List<Product> findPastMarkdownDate(LocalDate today);
 
-    @Query("SELECT p FROM Product p WHERE (p.expiryDate - p.timeDurationForMarkDown) BETWEEN :today AND :oneWeekFromNow")
+   // SELECT * FROM products WHERE DATE_SUB(expiry_date, INTERVAL time_duration_for_markdown DAY) < '2023-10-26'
+
+    @Query("SELECT p FROM Product p WHERE p.expiryDate < :calculatedDate")
+    List<Product> findPastMarkdownDate(@Param("calculatedDate") LocalDate calculatedDate);
+
+    @Query("SELECT p FROM Product p WHERE p.expiryDate BETWEEN :today AND :oneWeekFromNow")
     List<Product> findForMarkDownWithinWeek(LocalDate today, LocalDate oneWeekFromNow);
+
 }
 
