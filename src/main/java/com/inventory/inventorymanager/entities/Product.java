@@ -1,4 +1,4 @@
-package com.inventory.inventorymanager.model;
+package com.inventory.inventorymanager.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;

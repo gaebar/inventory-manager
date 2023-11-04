@@ -1,7 +1,7 @@
 package com.inventory.inventorymanager.cli;
 
 import com.inventory.inventorymanager.exceptions.ProductAlreadyExistsException;
-import com.inventory.inventorymanager.model.Product;
+import com.inventory.inventorymanager.entities.Product;
 import com.inventory.inventorymanager.service.ProductService;
 
 import java.time.format.DateTimeParseException;

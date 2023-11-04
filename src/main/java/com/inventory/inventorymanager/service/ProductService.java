@@ -2,7 +2,7 @@ package com.inventory.inventorymanager.service;
 
 import com.inventory.inventorymanager.exceptions.ProductAlreadyExistsException;
 import com.inventory.inventorymanager.exceptions.ProductNotFoundException;
-import com.inventory.inventorymanager.model.Product;
+import com.inventory.inventorymanager.entities.Product;
 import com.inventory.inventorymanager.repository.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

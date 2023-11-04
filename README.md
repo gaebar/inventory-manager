@@ -1,98 +1,81 @@
 # Retail Inventory Management System
 
-## Overview
-Retail Inventory Management System is a comprehensive Java-based application designed to tackle real-world challenges in retail inventory management. Developed as a solo assignment under the mentorship of TechBridge Inc, this application addresses key pain points in the retail sector, inspired by insights from Wal-Mart US CEO Greg Foran.
-
 > "We’ve got too much inventory in the back rooms and our processes are not where we want them to be and that’s causing some undue shrinkage and some out-of-stocks," said Wal-Mart US CEO Greg Foran.
 
 _Source: [Business Insider](https://www.businessinsider.com/wal-marts-ceo-reveals-8-main-problems-2015-4)_
 
+## Overview
+The Retail Inventory Management System is a Java-based application created to address the intricate needs of inventory management in retail. Developed with the guidance of TechBridge Inc., this project is inspired by the practical challenges faced by retailers, as highlighted by industry leaders like Greg Foran. It streamlines the inventory process, enhances visibility, and reduces losses due to overstocking and out-of-stock scenarios.
+
+## Overview
+The Retail Inventory Management System is a Java-based application created to address the intricate needs of inventory management in retail. Developed with the guidance of TechBridge Inc., this project is inspired by the practical challenges faced by retailers, as highlighted by industry leaders like Greg Foran. It streamlines the inventory process, enhances visibility, and reduces losses due to overstocking and out-of-stock scenarios.
+
 ## Key Features
-### Section A: Inventory Tracking
-- Track minimum and maximum items for display
-- Automatic notification for replenishment based on thresholds
+- **Inventory Tracking**: Monitor inventory levels, automate restock alerts, and manage stock thresholds.
+- **Expiry Date Management**: Keep an eye on product expiry dates and receive alerts for approaching or past expiration.
+- **Markdown Management**: Track and manage markdown schedules to optimize inventory turnover.
 
-### Section B: Expiry Date Management
-- Track expiry dates for each product
-- Send notifications for expired products
+Detailed project requirements can be found in the [Project Requirements](ProjectRequirements.md) document.
 
-### Section C: Markdown Management
-- Store Markdown Dates for each product
-- Notify when a product needs to be marked down
-
-## Project Requirements
-For detailed project requirements, see [Project Requirements](ProjectRequirements.md).
-
-##  Technologies and Tools Used
-### Backend Development:
-- **Backend:** [Java](https://www.java.com/) with [Spring Boot](https://spring.io/projects/spring-boot)
-- **Database:** [MySQL](https://www.mysql.com/)
-- **Object-Relational Mapping (ORM):** [Hibernate](https://hibernate.org/) with [JPA](https://jakarta.ee/specifications/persistence/)
-- **Data Validation:** [Jakarta Persistence API](https://jakarta.ee/specifications/persistence/)
-- **Build and Dependency Management:** [Maven](https://maven.apache.org/)
-  
-### Environment and Configuration:
-- ** GitHub Secrets:** Instead of the traditional .env file for environment variables, I experimented with GitHub Secrets to secure and manage sensitive information.
+## Technologies and Tools Used
+- **Backend**: [Java](https://www.java.com/) with [Spring Boot](https://spring.io/projects/spring-boot) for creating RESTful services.
+- **Database**: [MySQL](https://www.mysql.com/) for data persistence.
+- **ORM**: [Hibernate](https://hibernate.org/) with [JPA](https://jakarta.ee/specifications/persistence/) for efficient database operations.
+- **Data Validation**: Enforced by the [Jakarta Persistence API](https://jakarta.ee/specifications/persistence/).
+- **Build and Dependency Management**: Managed with [Maven](https://maven.apache.org/).
+- **Environment and Configuration**: Secured with GitHub Secrets for sensitive information management.
 
 ## User Interface
-### Command Line Interface (CLI):
-The application provides a Command Line Interface (CLI) for users to interact with the system. This interface ensures a seamless experience without the need for a GUI, making it lightweight and straightforward. Users can perform all necessary operations, like managing inventory and tracking expiry dates, directly from the command line.
+The application offers a Command Line Interface (CLI) for all inventory interactions, including adding, updating, listing, and removing inventory items. This allows for a nimble experience ideal for various environments, from small businesses to enterprise back-office operations.
 
---------------------------------
-## User Interface
-### Command Line Interface (CLI):
-The application currently provides a Command Line Interface (CLI) for managing inventory operations such as tracking items and expiry dates. A list of available CLI commands can be found below:
+A full list of CLI commands and their usage can be found below:
 
 - **List Inventory**: `java -jar inventory-manager.jar list`
 - **Add Item**: `java -jar inventory-manager.jar add --name "Item Name" --quantity 10`
 - **Update Item**: `java -jar inventory-manager.jar update --id 1 --name "New Item Name" --quantity 15`
 - **Remove Item**: `java -jar inventory-manager.jar remove --id 1`
 
-Future releases will aim to include a web-based interface for enhanced user interaction.
-
------------------------------------
+For future enhancements, we are exploring the addition of a web-based interface for an even more intuitive user experience.
 
 ## Installation Steps
+To get started with the Retail Inventory Management System, follow these steps:
+
+
+## Installation Steps
+To get started with the Retail Inventory Management System, follow these steps:
 
 1. **Clone the Repository:**
 ```bash
 git clone https://github.com/gaebar/inventory-manager.git
 ```
 
-2. Navigate into the directory:
+2. Navigate to the Project Directory:
 ```bash
 cd inventory-manager
 ```
 
-3. Build the Project:
-- For the default configuration (application.properties):
+3. Build the Application:
+- With default settings:
 ```bash
 mvn spring-boot:run -Dspring-boot.run.profiles=default
 ```
-
-- To use the GitHub Secrets configuration (application-github.properties):
+- Using GitHub Secrets configuration:
 ```bash
 mvn spring-boot:run -Dspring-boot.run.profiles=github
 ```
 
-4. Run the application:
-- **Using an IDE:**
-  If you're using an IDE like IntelliJ IDEA or Eclipse, you can directly run the `InventoryManagerApplication` class.
-  
-- **Using Command Line:** 
-  - **Default Configuration:**
+4. Run the Application:
+- Using an IDE like IntelliJ IDEA or Eclipse, run the `InventoryManagerApplication` class.
+- From the command line:
     ```bash
     mvn spring-boot:run
     ```
-     
-  - **Using GitHub Secrets Configuration:**
-    ```bash
-    mvn spring-boot:run -Dspring.profiles.active=github
-    ```
+Ensure Java and Maven are installed and properly configured on your system before starting.
+
 
 ### Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Your contributions are welcome! If you're interested in improving the Retail Inventory Management System, please feel free to fork the repository and submit a pull request. For substantial changes, please open an issue first to discuss what you propose. Check out the [Contribution Guidelines](CONTRIBUTING.md) for more details on how to contribute effectively.
 
 ### License
-[MIT License](LICENSE)
+The Retail Inventory Management System is made available as open source under the [MIT License](LICENSE), which provides a broad permission to use, modify, and distribute the software.
 
