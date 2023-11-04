@@ -26,14 +26,7 @@ Detailed project requirements can be found in the [Project Requirements](Project
 - **Environment and Configuration**: Secured with GitHub Secrets for sensitive information management.
 
 ## User Interface
-The application offers a Command Line Interface (CLI) for all inventory interactions, including adding, updating, listing, and removing inventory items. This allows for a nimble experience ideal for various environments, from small businesses to enterprise back-office operations.
-
-A full list of CLI commands and their usage can be found below:
-
-- **List Inventory**: `java -jar inventory-manager.jar list`
-- **Add Item**: `java -jar inventory-manager.jar add --name "Item Name" --quantity 10`
-- **Update Item**: `java -jar inventory-manager.jar update --id 1 --name "New Item Name" --quantity 15`
-- **Remove Item**: `java -jar inventory-manager.jar remove --id 1`
+The application offers an interactive Command Line Interface (CLI) for all inventory management, including adding, updating, listing, and removing inventory items.
 
 For future enhancements, we are exploring the addition of a web-based interface for an even more intuitive user experience.
 
@@ -53,25 +46,44 @@ git clone https://github.com/gaebar/inventory-manager.git
 ```bash
 cd inventory-manager
 ```
+3. Ensure Java, Maven and MySQL are installed and properly configured on your system before 
+   starting. The application is tested with Java 17, Maven 3.9.4, and MySQL 8.1.0.
 
-3. Build the Application:
-- With default settings:
+4. **Start and Configure the Database:**
+- Start a MySQL server on your local machine.
 ```bash
-mvn spring-boot:run -Dspring-boot.run.profiles=default
+mysql.server start
 ```
-- Using GitHub Secrets configuration:
+- Log in to the MySQL shell as the root user. Enter your MySQL password when prompted.
 ```bash
-mvn spring-boot:run -Dspring-boot.run.profiles=github
+mysql -u root -p
 ```
-
-4. Run the Application:
-- Using an IDE like IntelliJ IDEA or Eclipse, run the `InventoryManagerApplication` class.
+- Create a new MySQL database named `inventory_manager`.
+```bash
+mysql> CREATE DATABASE inventory_manager;
+```
+- Exit the MySQL shell.
+```bash
+mysql> exit
+```
+4.Build and Run the Application:
+- Using an IDE like IntelliJ IDEA or Eclipse, run the `InventoryManagerApplication` class 
+  setting the Spring Boot 'local' profile.
 - From the command line:
     ```bash
-    mvn spring-boot:run
+    mvn spring-boot:run -Dspring-boot.run.profiles=local
     ```
-Ensure Java and Maven are installed and properly configured on your system before starting.
+5. Package the Application:
+```
+mvn package
+```
 
+6. Run the Application from the Jar File, setting the Spring Boot 'local' profile and the 
+   database connection string. The database connection string should be in the format
+   `jdbc:mysql://<username>:<password>@<host>:<port>/<database_name>`. For example:
+```
+java -Dspring.profiles.active=local -Dspring.datasource.url=jdbc:mysql://root:root@localhost:3306/inventory_manager -jar inventory-manager-0.0.1-SNAPSHOT.jar
+```
 
 ### Contributing
 Your contributions are welcome! If you're interested in improving the Retail Inventory Management System, please feel free to fork the repository and submit a pull request. For substantial changes, please open an issue first to discuss what you propose. Check out the [Contribution Guidelines](CONTRIBUTING.md) for more details on how to contribute effectively.

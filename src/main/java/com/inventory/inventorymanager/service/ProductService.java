@@ -120,7 +120,7 @@ public class ProductService {
             // Display all products
             List<Product> products = getProducts(); // Reuse the existing method.
             // Logic to display these products in the console/GUI goes here.
-            return null; // Adjust return type based on your requirements.
+            return null;
         }
     }
 
