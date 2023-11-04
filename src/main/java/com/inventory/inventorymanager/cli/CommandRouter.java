@@ -43,8 +43,8 @@ public class CommandRouter implements CommandLineRunner{
             System.out.println("8. Display All Products by Expiry Date");
             System.out.println("9. Display Product by Expiry Date");
             System.out.println("10. Display Expired Products");
-            System.out.println("11. Display Products in Markdown");
-            System.out.println("12. Display Products for Future Markdown");
+            System.out.println("11. Display Markdown Products - Lists products currently discounted.");
+            System.out.println("12. Display Upcoming Markdowns - Shows products to be discounted next week.");
             System.out.println("13. Quit");
             System.out.print("Enter your choice: ");
             String command = scanner.nextLine();
