@@ -1,8 +1,6 @@
-# WIP: Retail Inventory Management System
+# Retail Inventory Management System
 
-**Status: Work in Progress**
-
-## Introduction
+## Overview
 Retail Inventory Management System is a comprehensive Java-based application designed to tackle real-world challenges in retail inventory management. Developed as a solo assignment under the mentorship of TechBridge Inc, this application addresses key pain points in the retail sector, inspired by insights from Wal-Mart US CEO Greg Foran.
 
 > "We’ve got too much inventory in the back rooms and our processes are not where we want them to be and that’s causing some undue shrinkage and some out-of-stocks," said Wal-Mart US CEO Greg Foran.
@@ -27,13 +25,11 @@ For detailed project requirements, see [Project Requirements](ProjectRequirement
 
 ##  Technologies and Tools Used
 ### Backend Development:
-- **Spring Boot:** The core framework used for building the application.
-- **Maven:** Dependency management and project building tool.
-- **Spring Data JPA (Java Persistence API):** Simplified database interaction using Java programming. It provides a platform to work directly with objects instead of using SQL statements.
-- **Hibernate:** ORM (Object-Relational Mapping) tool that enables Java application to interact with the database.
-
-### Database:
-- **MySQL:** The primary relational database where all application data is stored.
+- **Backend:** [Java](https://www.java.com/) with [Spring Boot](https://spring.io/projects/spring-boot)
+- **Database:** [MySQL](https://www.mysql.com/)
+- **Object-Relational Mapping (ORM):** [Hibernate](https://hibernate.org/) with [JPA](https://jakarta.ee/specifications/persistence/)
+- **Data Validation:** [Jakarta Persistence API](https://jakarta.ee/specifications/persistence/)
+- **Build and Dependency Management:** [Maven](https://maven.apache.org/)
   
 ### Environment and Configuration:
 - ** GitHub Secrets:** Instead of the traditional .env file for environment variables, I experimented with GitHub Secrets to secure and manage sensitive information.
@@ -41,6 +37,20 @@ For detailed project requirements, see [Project Requirements](ProjectRequirement
 ## User Interface
 ### Command Line Interface (CLI):
 The application provides a Command Line Interface (CLI) for users to interact with the system. This interface ensures a seamless experience without the need for a GUI, making it lightweight and straightforward. Users can perform all necessary operations, like managing inventory and tracking expiry dates, directly from the command line.
+
+--------------------------------
+## User Interface
+### Command Line Interface (CLI):
+The application currently provides a Command Line Interface (CLI) for managing inventory operations such as tracking items and expiry dates. A list of available CLI commands can be found below:
+
+- **List Inventory**: `java -jar inventory-manager.jar list`
+- **Add Item**: `java -jar inventory-manager.jar add --name "Item Name" --quantity 10`
+- **Update Item**: `java -jar inventory-manager.jar update --id 1 --name "New Item Name" --quantity 15`
+- **Remove Item**: `java -jar inventory-manager.jar remove --id 1`
+
+Future releases will aim to include a web-based interface for enhanced user interaction.
+
+-----------------------------------
 
 ## Installation Steps
 
