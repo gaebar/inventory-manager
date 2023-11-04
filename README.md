@@ -61,8 +61,9 @@ mysql> CREATE DATABASE inventory_manager;
 mysql> exit
 ```
 ### 4.Build and Run the Application:
-- Using an IDE like IntelliJ IDEA or Eclipse, run the `InventoryManagerApplication` class 
-  setting the Spring Boot 'local' profile.
+- Amend the application configuration file 'application-local.properties' to set the database connection string. The database connection string should be in the format
+  `jdbc:mysql://<username>:<password>@<host>:<port>/<database_name>`.
+- Using an IDE like IntelliJ IDEA or Eclipse, run the `InventoryManagerApplication` class setting the Spring Boot 'local' profile.
 - From the command line:
 ```bash
 mvn spring-boot:run -Dspring-boot.run.profiles=local
@@ -76,10 +77,8 @@ mvn package
 ### 6. Run the Application from the JAR package:
 Run the application from the created JAR package, setting the Spring Boot 'local' profile and the database connection string. The database connection string should be in the format
    `jdbc:mysql://<username>:<password>@<host>:<port>/<database_name>`. For example:
-```
-java -Dspring.profiles.active=local -Dspring.datasource.
-url=jdbc:mysql://root:root@localhost:3306/inventory_manager -jar target/inventory-manager-0.0.
-1-SNAPSHOT.jar
+```bash
+java -Dspring.profiles.active=local -Dspring.datasource.url=jdbc:mysql://root:root@localhost:3306/inventory_manager -jar target/inventory-manager-0.0.1-SNAPSHOT.jar
 ```
 
 ## Contributing
