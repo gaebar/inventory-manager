@@ -41,33 +41,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      */
     List<Product> findByExpiryDateBefore(LocalDate date);
 
-    /**
-     * Retrieves products where stock is below the minimum threshold.
-     * @return List of products with stock below the minimum threshold.
-     */
-    List<Product> findByCurrentStockLessThan(Integer threshold);
 
-    /**
-     * Retrieves a list of products where the current stock is less than the specified value
-     * and the product ID matches the given ID.
-     *
-     * @param currentStock The threshold stock value.
-     * @param id The product ID.
-     * @return List of products matching the criteria.
-     */
-    List<Product> findByCurrentStockLessThanAndProductID(Integer currentStock, Long id);
-
-    /**
-     * Checks if a product with the given productID exists in the database.
-     * @param productID The ID of the product.
-     * @return true if a product with the given productID exists, false otherwise.
-     */
-    boolean existsByProductID(Long productID);
-
-
-   //
-
-//    @Query("SELECT p FROM Product p WHERE p.expiryDate < :calculatedDate")
     @Query(nativeQuery = true, value ="SELECT * FROM products WHERE DATE_SUB(expiry_date, INTERVAL time_duration_for_markdown DAY) < :today")
     List<Product> findPastMarkdownDate(@Param("today") LocalDate calculatedDate);
 

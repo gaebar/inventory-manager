@@ -18,14 +18,4 @@ public class ProductAlreadyExistsException extends RuntimeException {
     public ProductAlreadyExistsException(String message) {
         super(message);
     }
-
-    /**
-     * Constructs a new ProductAlreadyExistsException with the specified detail message and cause.
-     *
-     * @param message The detail message, saved for later retrieval by the Throwable.getMessage() method.
-     * @param cause The cause of the exception.
-     */
-    public ProductAlreadyExistsException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

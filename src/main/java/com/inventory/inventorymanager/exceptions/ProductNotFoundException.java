@@ -19,14 +19,4 @@ public class ProductNotFoundException extends RuntimeException {
     public ProductNotFoundException(String message) {
         super(message);
     }
-
-    /**
-     * Constructs a new ProductNotFoundException with the specified detail message and cause.
-     *
-     * @param message The detail message, saved for later retrieval by the Throwable.getMessage() method.
-     * @param cause The cause of the exception.
-     */
-    public ProductNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }
