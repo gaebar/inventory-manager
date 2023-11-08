@@ -40,11 +40,11 @@ public class CommandRouter implements CommandLineRunner{
             System.out.println("5. Display Product to Refill");
             System.out.println("6. Display All Products Count");
             System.out.println("7. Display Product Count");
-            System.out.println("8. Display All Products by Expiry Date");
-            System.out.println("9. Display Product by Expiry Date");
+            System.out.println("8. Display All Products with their Expiry Date");
+            System.out.println("9. Display Product Expiry Date");
             System.out.println("10. Display Expired Products");
-            System.out.println("11. Display Markdown Products - Lists products currently discounted.");
-            System.out.println("12. Display Upcoming Markdowns - Shows products to be discounted next week.");
+            System.out.println("11. Display Markdown Products - Lists products currently discounted");
+            System.out.println("12. Display Upcoming Markdowns - Shows products to be discounted next week");
             System.out.println("13. Quit");
             System.out.print("Enter your choice: ");
             String command = scanner.nextLine();
@@ -88,8 +88,8 @@ public class CommandRouter implements CommandLineRunner{
                     break;
 
                 case "8":
-                    System.out.println("You chose: Display All Products by Expiry Date");
-                    productCLI.displayProductExpiryDate();
+                    System.out.println("You chose: Display All Products with their Expiry Date");
+                    productCLI.displayProductsExpiryDate();
                     break;
 
                 case "9":
@@ -103,12 +103,12 @@ public class CommandRouter implements CommandLineRunner{
                     break;
 
                 case "11":
-                    System.out.println("You chose: Display Products in Markdown");
+                    System.out.println("You chose: Display Markdown Products - Lists products currently discounted.");
                     productCLI.displayProductsInMarkDown();
                     break;
 
                 case "12":
-                    System.out.println("You chose: Display Products for Future Markdown");
+                    System.out.println("You chose: Display Upcoming Markdowns - Shows products to be discounted next week");
                     productCLI.displayProductsForMarkDown();
                     break;
 

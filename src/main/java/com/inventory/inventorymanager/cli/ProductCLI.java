@@ -376,10 +376,10 @@ public class ProductCLI {
             String productIDString = scanner.nextLine();
 
             if (productIDString == null || productIDString.trim().isEmpty()) {
-                displayProductExpiryDate();
+                displayProductsExpiryDate();
             } else {
                 long productID = Long.parseLong(productIDString);
-                displayProductExpiryDate(productID);
+                displayProductsExpiryDate(productID);
             }
 
         } catch (NumberFormatException e) {
@@ -392,7 +392,7 @@ public class ProductCLI {
         promptForAnotherOperationOrExit();
     }
 
-    public void displayProductExpiryDate() {
+    public void displayProductsExpiryDate() {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             List<Product> allProducts = productService.getProducts();
@@ -417,7 +417,7 @@ public class ProductCLI {
         promptForAnotherOperationOrExit();
     }
 
-    public void displayProductExpiryDate(long productID) {
+    public void displayProductsExpiryDate(long productID) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             Product product = productService.getProductById(productID);
