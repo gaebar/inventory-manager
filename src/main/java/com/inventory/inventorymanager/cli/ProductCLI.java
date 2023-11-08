@@ -81,7 +81,7 @@ public class ProductCLI {
 
         while (true) {
             try {
-                System.out.println("Enter TimeDurationForMarkDown or leave blank for default (6): ");
+                System.out.println("Enter TimeDurationForMarkDown or leave blank for default (6 days from today): ");
                 String timeDurationStr = scanner.nextLine();
                 timeDurationForMarkDown = timeDurationStr.isEmpty() ? 6 : Integer.parseInt(timeDurationStr);
                 break;
