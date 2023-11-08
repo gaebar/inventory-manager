@@ -72,6 +72,8 @@ public class ProductCLI {
             try {
                 System.out.println("Enter ExpiryDate (yyyy-MM-dd) or leave blank for default (3 months from today): ");
                 String expiryDateStr = scanner.nextLine();
+                // If the user leaves the field blank, set the expiry date to 3 months from today
+                // This is achieved by using LocalDate.now() to get the current date and adding 3 months to it
                 expiryDate = expiryDateStr.isEmpty() ? LocalDate.now().plusMonths(3) : LocalDate.parse(expiryDateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 break;
             } catch (DateTimeParseException e) {
@@ -83,6 +85,8 @@ public class ProductCLI {
             try {
                 System.out.println("Enter TimeDurationForMarkDown or leave blank for default (6 days from today): ");
                 String timeDurationStr = scanner.nextLine();
+                // If the user leaves the field blank, set the time duration to 6 days from today
+                // This is achieved by using LocalDate.now() to get the current date and adding 6 days to it
                 timeDurationForMarkDown = timeDurationStr.isEmpty() ? 6 : Integer.parseInt(timeDurationStr);
                 break;
             } catch (NumberFormatException e) {
